@@ -10,8 +10,12 @@ resources:
   - client-deployment.yml
   - client-service.yml
   - ingress.yml
-  - secrets.yml
   - hpa.yml
+
+secretGenerator:
+  - name: linguistai-secrets
+    envs:
+      - .env
 
 commonLabels:
   app.kubernetes.io/part-of: linguistai

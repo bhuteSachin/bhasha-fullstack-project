@@ -48,6 +48,13 @@ jobs:
       - name: Get image tag
         id: tag
         run: echo "TAG=$(echo ${{ github.event.workflow_run.head_sha }} | head -c 7)" >> $GITHUB_OUTPUT
+      # --- Inject Secrets from AWS Secrets Manager ---
+      - name: Inject Secrets
+        run: |
+          aws secretsmanager get-secret-value \
+            --secret-id linguistai/dev/app-secrets \
+            --query SecretString \
+            --output text | jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' > kubernetes/base/.env
 
       # --- Update Kubernetes manifests with new image tag ---
       - name: Update server deployment image
