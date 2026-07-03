@@ -1,0 +1,66 @@
+# ==============================
+# LinguistAI — Bastion Host Setup
+# ==============================
+# Usage: ansible-playbook playbooks/setup-bastion.yml -i inventory/dev.yml
+# ==============================
+
+---
+- name: Setup Bastion Host
+  hosts: role_bastion
+  become: true
+  vars:
+    eks_cluster_name: "linguistai-cluster-dev"
+    aws_region: "ap-south-1"
+
+  roles:
+    - common
+    - docker
+    - kubernetes
+
+  tasks:
+    # ==============================
+    # Configure kubeconfig for EKS
+    # ==============================
+    - name: Update kubeconfig for EKS
+      become: false
+      command: >
+        aws eks update-kubeconfig
+        --name {{ eks_cluster_name }}
+        --region {{ aws_region }}
+      changed_when: true
+
+    # ==============================
+    # Security Hardening
+    # ==============================
+    - name: Install fail2ban
+      package:
+        name: fail2ban
+        state: present
+
+    - name: Enable and start fail2ban
+      service:
+        name: fail2ban
+        state: started
+        enabled: true
+
+    - name: Disable password authentication
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#?PasswordAuthentication'
+        line: 'PasswordAuthentication no'
+        state: present
+      notify: Restart SSH
+
+    - name: Disable root login
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#?PermitRootLogin'
+        line: 'PermitRootLogin no'
+        state: present
+      notify: Restart SSH
+
+  handlers:
+    - name: Restart SSH
+      service:
+        name: sshd
+        state: restarted

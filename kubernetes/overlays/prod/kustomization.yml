@@ -1,0 +1,26 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base
+  - pdb.yml
+
+namePrefix: prod-
+
+patches:
+  # Production scaling
+  - target:
+      kind: Deployment
+      name: linguistai-server
+    patch: |
+      - op: replace
+        path: /spec/replicas
+        value: 3
+
+  - target:
+      kind: Deployment
+      name: linguistai-client
+    patch: |
+      - op: replace
+        path: /spec/replicas
+        value: 2

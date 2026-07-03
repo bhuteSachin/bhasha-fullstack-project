@@ -1,0 +1,87 @@
+# ==============================
+# Kubernetes Role — Install K8s Tools
+# ==============================
+
+---
+# ==============================
+# kubectl
+# ==============================
+- name: Download kubectl
+  get_url:
+    url: "https://dl.k8s.io/release/{{ kubectl_version }}/bin/linux/amd64/kubectl"
+    dest: /usr/local/bin/kubectl
+    mode: '0755'
+
+- name: Verify kubectl installation
+  command: kubectl version --client
+  register: kubectl_version_output
+  changed_when: false
+
+- name: Display kubectl version
+  debug:
+    var: kubectl_version_output.stdout
+
+# ==============================
+# Helm
+# ==============================
+- name: Install Helm
+  shell: |
+    curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+  args:
+    creates: /usr/local/bin/helm
+
+- name: Verify Helm installation
+  command: helm version
+  register: helm_version_output
+  changed_when: false
+
+- name: Display Helm version
+  debug:
+    var: helm_version_output.stdout
+
+# ==============================
+# AWS CLI v2
+# ==============================
+- name: Check if AWS CLI is installed
+  command: aws --version
+  register: aws_cli_check
+  ignore_errors: true
+  changed_when: false
+
+- name: Install AWS CLI v2
+  block:
+    - name: Download AWS CLI
+      get_url:
+        url: https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip
+        dest: /tmp/awscliv2.zip
+
+    - name: Unzip AWS CLI
+      unarchive:
+        src: /tmp/awscliv2.zip
+        dest: /tmp/
+        remote_src: true
+
+    - name: Install AWS CLI
+      command: /tmp/aws/install
+      args:
+        creates: /usr/local/bin/aws
+
+    - name: Cleanup
+      file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - /tmp/awscliv2.zip
+        - /tmp/aws
+  when: aws_cli_check.rc != 0
+
+# ==============================
+# eksctl
+# ==============================
+- name: Install eksctl
+  shell: |
+    curl -sLO "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_Linux_amd64.tar.gz"
+    tar -xzf eksctl_Linux_amd64.tar.gz -C /usr/local/bin
+    rm eksctl_Linux_amd64.tar.gz
+  args:
+    creates: /usr/local/bin/eksctl

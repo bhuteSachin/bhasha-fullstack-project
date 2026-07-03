@@ -1,0 +1,106 @@
+# ==============================
+# Network Policies — LinguistAI
+# ==============================
+# Restricts network traffic between pods
+
+# Server: Allow ingress from client and ingress controller only
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: server-network-policy
+  namespace: linguistai
+spec:
+  podSelector:
+    matchLabels:
+      component: server
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    # Allow from client pods
+    - from:
+        - podSelector:
+            matchLabels:
+              component: client
+      ports:
+        - port: 5000
+          protocol: TCP
+    # Allow from ingress controller
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+      ports:
+        - port: 5000
+          protocol: TCP
+    # Allow Prometheus scraping
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: monitoring
+      ports:
+        - port: 5000
+          protocol: TCP
+  egress:
+    # Allow DNS
+    - to: []
+      ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+    # Allow MongoDB Atlas (HTTPS)
+    - to: []
+      ports:
+        - port: 27017
+          protocol: TCP
+    # Allow external HTTPS (Gemini API, Brevo, Razorpay)
+    - to: []
+      ports:
+        - port: 443
+          protocol: TCP
+    # Allow SMTP (Brevo)
+    - to: []
+      ports:
+        - port: 2525
+          protocol: TCP
+
+---
+# Client: Allow ingress from ingress controller only
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: client-network-policy
+  namespace: linguistai
+spec:
+  podSelector:
+    matchLabels:
+      component: client
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    # Allow from ingress controller
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+      ports:
+        - port: 80
+          protocol: TCP
+  egress:
+    # Allow DNS
+    - to: []
+      ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+    # Allow to server pods
+    - to:
+        - podSelector:
+            matchLabels:
+              component: server
+      ports:
+        - port: 5000
+          protocol: TCP

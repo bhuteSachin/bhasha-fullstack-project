@@ -1,0 +1,56 @@
+# ==============================
+# Docker Role — Install & Configure Docker
+# ==============================
+
+---
+- name: Install Docker (Amazon Linux 2023)
+  package:
+    name: docker
+    state: present
+  when: ansible_os_family == "RedHat"
+
+- name: Install Docker (Debian/Ubuntu)
+  block:
+    - name: Add Docker GPG key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker repository
+      apt_repository:
+        repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+        state: present
+
+    - name: Install Docker CE
+      apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+        state: present
+        update_cache: true
+  when: ansible_os_family == "Debian"
+
+- name: Start and enable Docker service
+  service:
+    name: docker
+    state: started
+    enabled: true
+
+- name: Add current user to docker group
+  user:
+    name: "{{ ansible_user }}"
+    groups: docker
+    append: true
+
+- name: Install Docker Compose plugin
+  command: >
+    curl -SL https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64
+    -o /usr/local/bin/docker-compose
+  args:
+    creates: /usr/local/bin/docker-compose
+
+- name: Make docker-compose executable
+  file:
+    path: /usr/local/bin/docker-compose
+    mode: '0755'

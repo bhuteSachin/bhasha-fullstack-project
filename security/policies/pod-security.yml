@@ -1,0 +1,13 @@
+# ==============================
+# Pod Security Standards — LinguistAI
+# ==============================
+# Enforces restricted security context for all pods
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: linguistai
+  labels:
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/warn: restricted

@@ -1,0 +1,85 @@
+# ==============================
+# LinguistAI — Deploy Monitoring Stack
+# ==============================
+# Usage: ansible-playbook playbooks/deploy-monitoring.yml -i inventory/dev.yml
+# ==============================
+
+---
+- name: Deploy Monitoring Stack to EKS
+  hosts: role_bastion
+  become: false
+  vars:
+    monitoring_namespace: "monitoring"
+    grafana_admin_password: "{{ lookup('env', 'GRAFANA_ADMIN_PASSWORD') | default('admin', true) }}"
+
+  tasks:
+    # ==============================
+    # Add Helm Repos
+    # ==============================
+    - name: Add Prometheus Community Helm repo
+      command: helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+      changed_when: true
+      ignore_errors: true
+
+    - name: Add Grafana Helm repo
+      command: helm repo add grafana https://grafana.github.io/helm-charts
+      changed_when: true
+      ignore_errors: true
+
+    - name: Update Helm repos
+      command: helm repo update
+      changed_when: true
+
+    # ==============================
+    # Create Monitoring Namespace
+    # ==============================
+    - name: Create monitoring namespace
+      command: kubectl create namespace {{ monitoring_namespace }}
+      ignore_errors: true
+      changed_when: true
+
+    # ==============================
+    # Deploy kube-prometheus-stack
+    # ==============================
+    - name: Deploy Prometheus + Grafana stack
+      command: >
+        helm upgrade --install prometheus
+        prometheus-community/kube-prometheus-stack
+        --namespace {{ monitoring_namespace }}
+        --values {{ playbook_dir }}/../monitoring/prometheus/values.yml
+        --set grafana.adminPassword={{ grafana_admin_password }}
+        --wait
+        --timeout 10m
+      changed_when: true
+
+    # ==============================
+    # Apply custom dashboards
+    # ==============================
+    - name: Create Grafana dashboards ConfigMap
+      command: >
+        kubectl create configmap linguistai-dashboards
+        --from-file={{ playbook_dir }}/../monitoring/grafana/dashboards/
+        --namespace {{ monitoring_namespace }}
+        --dry-run=client -o yaml | kubectl apply -f -
+      changed_when: true
+
+    # ==============================
+    # Verify Deployment
+    # ==============================
+    - name: Verify Prometheus is running
+      command: kubectl get pods -n {{ monitoring_namespace }} -l app.kubernetes.io/name=prometheus
+      register: prometheus_pods
+      changed_when: false
+
+    - name: Display Prometheus pods
+      debug:
+        var: prometheus_pods.stdout_lines
+
+    - name: Verify Grafana is running
+      command: kubectl get pods -n {{ monitoring_namespace }} -l app.kubernetes.io/name=grafana
+      register: grafana_pods
+      changed_when: false
+
+    - name: Display Grafana pods
+      debug:
+        var: grafana_pods.stdout_lines

@@ -1,0 +1,47 @@
+# ==============================
+# Common Role — System Setup
+# ==============================
+
+---
+- name: Update system packages
+  package:
+    name: "*"
+    state: latest
+  when: ansible_os_family == "RedHat"
+
+- name: Update apt packages
+  apt:
+    upgrade: dist
+    update_cache: true
+  when: ansible_os_family == "Debian"
+
+- name: Install essential packages
+  package:
+    name:
+      - curl
+      - wget
+      - unzip
+      - git
+      - jq
+      - htop
+      - vim
+      - net-tools
+      - ca-certificates
+    state: present
+
+- name: Set timezone
+  timezone:
+    name: Asia/Kolkata
+
+- name: Configure automatic security updates (RHEL/Amazon Linux)
+  package:
+    name: yum-cron
+    state: present
+  when: ansible_os_family == "RedHat"
+
+- name: Enable automatic security updates
+  service:
+    name: yum-cron
+    state: started
+    enabled: true
+  when: ansible_os_family == "RedHat"

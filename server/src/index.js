@@ -15,6 +15,7 @@ import { fileURLToPath } from 'url';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import { initializeSocket } from './socket/chat.js';
+import client from 'prom-client';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -39,6 +40,55 @@ app.use((req, res, next) => {
     next();
 });
 app.use(express.json());
+
+// ==============================
+// Prometheus Metrics Setup
+// ==============================
+const register = new client.Registry();
+client.collectDefaultMetrics({ register });
+
+// Custom metrics
+const httpRequestDuration = new client.Histogram({
+    name: 'http_request_duration_seconds',
+    help: 'Duration of HTTP requests in seconds',
+    labelNames: ['method', 'route', 'status'],
+    buckets: [0.01, 0.05, 0.1, 0.5, 1, 2, 5],
+    registers: [register],
+});
+
+const httpRequestsTotal = new client.Counter({
+    name: 'http_requests_total',
+    help: 'Total number of HTTP requests',
+    labelNames: ['method', 'route', 'status'],
+    registers: [register],
+});
+
+const activeConnections = new client.Gauge({
+    name: 'socketio_active_connections',
+    help: 'Number of active Socket.IO connections',
+    registers: [register],
+});
+
+// Metrics middleware
+app.use((req, res, next) => {
+    const start = process.hrtime.bigint();
+    res.on('finish', () => {
+        const duration = Number(process.hrtime.bigint() - start) / 1e9;
+        const route = req.route ? req.route.path : req.path;
+        httpRequestDuration.observe({ method: req.method, route, status: res.statusCode }, duration);
+        httpRequestsTotal.inc({ method: req.method, route, status: res.statusCode });
+    });
+    next();
+});
+
+// Metrics endpoint
+app.get('/metrics', async (req, res) => {
+    res.set('Content-Type', register.contentType);
+    res.end(await register.metrics());
+});
+
+// Export activeConnections gauge for socket.js to use
+export { activeConnections };
 
 // Routes
 app.use('/auth', authRoutes);

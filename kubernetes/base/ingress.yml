@@ -1,0 +1,76 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: linguistai-ingress
+  namespace: linguistai
+  labels:
+    app: linguistai
+  annotations:
+    # AWS ALB Ingress Controller
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/ssl-redirect: "443"
+    alb.ingress.kubernetes.io/healthcheck-path: /health
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: "30"
+    alb.ingress.kubernetes.io/healthcheck-timeout-seconds: "5"
+    alb.ingress.kubernetes.io/healthy-threshold-count: "2"
+    alb.ingress.kubernetes.io/unhealthy-threshold-count: "3"
+spec:
+  rules:
+    - http:
+        paths:
+          # API routes → Server
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: linguistai-server
+                port:
+                  number: 5000
+
+          # Auth routes → Server
+          - path: /auth
+            pathType: Prefix
+            backend:
+              service:
+                name: linguistai-server
+                port:
+                  number: 5000
+
+          # Socket.IO → Server
+          - path: /socket.io
+            pathType: Prefix
+            backend:
+              service:
+                name: linguistai-server
+                port:
+                  number: 5000
+
+          # Health check → Server
+          - path: /health
+            pathType: Exact
+            backend:
+              service:
+                name: linguistai-server
+                port:
+                  number: 5000
+
+          # Translate route → Server
+          - path: /translate
+            pathType: Prefix
+            backend:
+              service:
+                name: linguistai-server
+                port:
+                  number: 5000
+
+          # Everything else → Client
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: linguistai-client
+                port:
+                  number: 80

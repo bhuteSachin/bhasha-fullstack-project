@@ -1,0 +1,169 @@
+# ==============================
+# Prometheus Stack - Helm Values
+# ==============================
+# helm install prometheus prometheus-community/kube-prometheus-stack -f values.yml -n monitoring
+# ==============================
+
+# Prometheus
+prometheus:
+  prometheusSpec:
+    retention: 15d
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 20Gi
+
+    # Scrape LinguistAI server metrics
+    additionalScrapeConfigs:
+      - job_name: 'linguistai-server'
+        kubernetes_sd_configs:
+          - role: pod
+            namespaces:
+              names:
+                - linguistai
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+            action: keep
+            regex: true
+          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_port]
+            action: replace
+            target_label: __address__
+            regex: (.+)
+            replacement: $1
+          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+            action: replace
+            target_label: __metrics_path__
+            regex: (.+)
+
+  # Alert rules
+  additionalPrometheusRulesMap:
+    linguistai-alerts:
+      groups:
+        - name: linguistai.server
+          rules:
+            # High error rate
+            - alert: HighErrorRate
+              expr: rate(http_requests_total{status=~"5.."}[5m]) / rate(http_requests_total[5m]) > 0.05
+              for: 5m
+              labels:
+                severity: critical
+              annotations:
+                summary: "High error rate on LinguistAI server"
+                description: "Error rate is above 5% for the last 5 minutes"
+
+            # Pod restarts
+            - alert: PodRestarting
+              expr: increase(kube_pod_container_status_restarts_total{namespace="linguistai"}[1h]) > 3
+              for: 5m
+              labels:
+                severity: warning
+              annotations:
+                summary: "Pod {{ $labels.pod }} is restarting frequently"
+                description: "Pod has restarted more than 3 times in the last hour"
+
+            # High CPU usage
+            - alert: HighCPUUsage
+              expr: rate(container_cpu_usage_seconds_total{namespace="linguistai"}[5m]) > 0.8
+              for: 10m
+              labels:
+                severity: warning
+              annotations:
+                summary: "High CPU usage on {{ $labels.pod }}"
+                description: "CPU usage is above 80% for 10 minutes"
+
+            # High memory usage
+            - alert: HighMemoryUsage
+              expr: container_memory_working_set_bytes{namespace="linguistai"} / container_spec_memory_limit_bytes > 0.85
+              for: 5m
+              labels:
+                severity: warning
+              annotations:
+                summary: "High memory usage on {{ $labels.pod }}"
+                description: "Memory usage is above 85%"
+
+            # Response time
+            - alert: HighResponseTime
+              expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) > 2
+              for: 5m
+              labels:
+                severity: warning
+              annotations:
+                summary: "High response time on LinguistAI server"
+                description: "95th percentile response time is above 2 seconds"
+
+# Grafana
+grafana:
+  enabled: true
+  adminPassword: "admin"  # Override in production
+
+  persistence:
+    enabled: true
+    size: 5Gi
+
+  dashboardProviders:
+    dashboardproviders.yaml:
+      apiVersion: 1
+      providers:
+        - name: 'linguistai'
+          orgId: 1
+          folder: 'LinguistAI'
+          type: file
+          disableDeletion: false
+          editable: true
+          options:
+            path: /var/lib/grafana/dashboards/linguistai
+
+  sidecar:
+    dashboards:
+      enabled: true
+      label: grafana_dashboard
+      searchNamespace: monitoring
+
+  service:
+    type: LoadBalancer
+
+# Alertmanager
+alertmanager:
+  enabled: true
+  config:
+    global:
+      smtp_smarthost: 'smtp-relay.brevo.com:2525'
+      smtp_from: 'alerts@linguistai.com'
+      smtp_auth_username: '9eda5a001@smtp-brevo.com'
+      smtp_require_tls: true
+
+    route:
+      group_by: ['alertname', 'namespace']
+      group_wait: 30s
+      group_interval: 5m
+      repeat_interval: 4h
+      receiver: 'email-notifications'
+      routes:
+        - match:
+            severity: critical
+          receiver: 'email-critical'
+          repeat_interval: 1h
+
+    receivers:
+      - name: 'email-notifications'
+        email_configs:
+          - to: 'shubhamgayke9860@gmail.com'
+            send_resolved: true
+
+      - name: 'email-critical'
+        email_configs:
+          - to: 'shubhamgayke9860@gmail.com'
+            send_resolved: true
+            headers:
+              Subject: '🚨 CRITICAL: {{ .GroupLabels.alertname }}'
+
+# Node exporter
+nodeExporter:
+  enabled: true
+
+# Kube state metrics
+kubeStateMetrics:
+  enabled: true

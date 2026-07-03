@@ -1,0 +1,119 @@
+# ==============================
+# LinguistAI — CD Pipeline
+# ==============================
+# Triggers after CI completes on main branch
+# Deploys to EKS cluster
+# ==============================
+
+name: CD Pipeline
+
+on:
+  workflow_run:
+    workflows: ["CI Pipeline"]
+    types:
+      - completed
+    branches: [main]
+
+env:
+  AWS_REGION: ap-south-1
+  EKS_CLUSTER_NAME: linguistai-cluster
+  ECR_REGISTRY: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-south-1.amazonaws.com
+  SERVER_IMAGE: linguistai-server
+  CLIENT_IMAGE: linguistai-client
+  NAMESPACE: linguistai
+
+jobs:
+  deploy:
+    name: 🚀 Deploy to EKS
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Update kubeconfig
+        run: |
+          aws eks update-kubeconfig \
+            --name ${{ env.EKS_CLUSTER_NAME }} \
+            --region ${{ env.AWS_REGION }}
+
+      - name: Get image tag
+        id: tag
+        run: echo "TAG=$(echo ${{ github.event.workflow_run.head_sha }} | head -c 7)" >> $GITHUB_OUTPUT
+
+      # --- Update Kubernetes manifests with new image tag ---
+      - name: Update server deployment image
+        run: |
+          cd kubernetes/overlays/prod
+          kustomize edit set image \
+            server=${{ env.ECR_REGISTRY }}/${{ env.SERVER_IMAGE }}:${{ steps.tag.outputs.TAG }}
+
+      - name: Update client deployment image
+        run: |
+          cd kubernetes/overlays/prod
+          kustomize edit set image \
+            client=${{ env.ECR_REGISTRY }}/${{ env.CLIENT_IMAGE }}:${{ steps.tag.outputs.TAG }}
+
+      # --- Deploy to EKS ---
+      - name: Deploy with Kustomize
+        run: |
+          kubectl apply -k kubernetes/overlays/prod
+
+      - name: Wait for server rollout
+        run: |
+          kubectl rollout status deployment/linguistai-server \
+            -n ${{ env.NAMESPACE }} \
+            --timeout=300s
+
+      - name: Wait for client rollout
+        run: |
+          kubectl rollout status deployment/linguistai-client \
+            -n ${{ env.NAMESPACE }} \
+            --timeout=300s
+
+      # --- Smoke Test ---
+      - name: Smoke test - Health check
+        run: |
+          # Get the server service endpoint
+          SERVER_URL=$(kubectl get svc linguistai-server \
+            -n ${{ env.NAMESPACE }} \
+            -o jsonpath='{.status.loadBalancer.ingress[0].hostname}' 2>/dev/null || echo "")
+
+          if [ -z "$SERVER_URL" ]; then
+            echo "Using port-forward for smoke test..."
+            kubectl port-forward svc/linguistai-server 5000:5000 \
+              -n ${{ env.NAMESPACE }} &
+            sleep 5
+            SERVER_URL="http://localhost:5000"
+          fi
+
+          # Health check
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${SERVER_URL}/health" || echo "000")
+          if [ "$HTTP_STATUS" = "200" ]; then
+            echo "✅ Health check passed!"
+          else
+            echo "❌ Health check failed with status: $HTTP_STATUS"
+            exit 1
+          fi
+
+      # --- Notify ---
+      - name: Deployment summary
+        if: always()
+        run: |
+          echo "## 🚀 Deployment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- **Cluster**: ${{ env.EKS_CLUSTER_NAME }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Namespace**: ${{ env.NAMESPACE }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Image Tag**: ${{ steps.tag.outputs.TAG }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status**: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
