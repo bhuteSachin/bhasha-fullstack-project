@@ -41,22 +41,22 @@ graph TD
     classDef cicd fill:#2088FF,stroke:#fff,stroke-width:2px,color:white;
     classDef internet fill:#00d2ff,stroke:#fff,stroke-width:2px,color:black;
 
-    User([👤 You / End User]):::user -->|Types URL in Browser| Internet((🌐 Internet)):::internet
-    Internet -->|Routes Traffic| ALB[⚖️ AWS Application Load Balancer]:::aws
+    User(["👤 You / End User"]):::user -->|Types URL in Browser| Internet(("🌐 Internet")):::internet
+    Internet -->|Routes Traffic| ALB["⚖️ AWS Application Load Balancer"]:::aws
     
     subgraph AWS_Cloud ["☁️ AWS Cloud Environment"]
         ALB -->|Distributes Traffic| EKS_Nodes
         
         subgraph EKS ["☸️ Amazon EKS (Kubernetes Cluster)"]
-            EKS_Control[🧠 EKS Control Plane<br/>The Master Brain]:::k8s
+            EKS_Control["🧠 EKS Control Plane<br/>The Master Brain"]:::k8s
             
             subgraph EKS_Nodes ["🖥️ EC2 Auto Scaling Group (Worker Nodes)"]
-                Node1[Node 1: t3.small]:::aws
-                Node2[Node 2: t3.small]:::aws
+                Node1["Node 1: t3.small"]:::aws
+                Node2["Node 2: t3.small"]:::aws
                 
                 subgraph Pods ["📦 Kubernetes Pods"]
-                    Client[🎨 Frontend React Pod<br/>(Nginx)]:::k8s
-                    Server[⚙️ Backend Node.js Pod<br/>(Express)]:::k8s
+                    Client["🎨 Frontend React Pod<br/>(Nginx)"]:::k8s
+                    Server["⚙️ Backend Node.js Pod<br/>(Express)"]:::k8s
                 end
             end
             
@@ -64,13 +64,13 @@ graph TD
         end
         
         Client -->|API Requests| Server
-        Server -->|Saves Data| MongoDB[(🍃 MongoDB Atlas)]:::db
-        Server -->|AI Translations| Gemini[🤖 Google Gemini API]
+        Server -->|Saves Data| MongoDB[("🍃 MongoDB Atlas")]:::db
+        Server -->|AI Translations| Gemini["🤖 Google Gemini API"]
     end
     
     subgraph Automation ["⚙️ CI/CD Pipeline"]
-        Git[🐙 Push to GitHub]:::cicd --> Action[⚡ GitHub Actions]:::cicd
-        Action -->|Builds| Docker[🐳 DockerHub]:::cicd
+        Git["🐙 Push to GitHub"]:::cicd --> Action["⚡ GitHub Actions"]:::cicd
+        Action -->|Builds| Docker["🐳 DockerHub"]:::cicd
         Action -->|Deploys New Version| EKS_Control
     end
 ```
