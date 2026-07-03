@@ -1,0 +1,108 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-dark-bg text-dark-text overflow-x-hidden font-sans antialiased;
+  }
+
+  input, textarea, select, button {
+    @apply font-sans;
+  }
+
+  @media (max-width: 768px) {
+    input, textarea, select {
+      font-size: 16px !important; /* Prevent iOS zoom */
+    }
+  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-dark-bg;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-primary-600/30 rounded-full hover:bg-primary-600/50 transition-colors;
+  }
+}
+
+@layer utilities {
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  .glass {
+    @apply bg-white/5 backdrop-blur-md border border-white/10 shadow-glass;
+  }
+
+  .glass-card {
+    @apply bg-dark-card/40 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl shadow-black/40;
+  }
+
+  .holographic-border {
+    position: relative;
+  }
+
+  .holographic-border::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    z-index: -1;
+    background: linear-gradient(90deg,
+        transparent,
+        rgba(139, 92, 246, 0.5),
+        rgba(217, 70, 239, 0.5),
+        rgba(139, 92, 246, 0.5),
+        transparent);
+    background-size: 200% 100%;
+    animation: border-flow 4s linear infinite;
+    border-radius: inherit;
+    opacity: 0.5;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    -webkit-mask-composite: xor;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary-400 to-primary-600;
+  }
+
+  .animate-gradient-x {
+    background-size: 200% 200%;
+    animation: gradient-x 3s ease infinite;
+  }
+
+  .animate-pulse-slow {
+    animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  @keyframes border-flow {
+    0% {
+      background-position: 100% 0;
+    }
+
+    100% {
+      background-position: -100% 0;
+    }
+  }
+
+  @keyframes gradient-x {
+    0% {
+      background-position: 0% 50%;
+    }
+
+    50% {
+      background-position: 100% 50%;
+    }
+
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+}

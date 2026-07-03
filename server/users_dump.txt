@@ -1,0 +1,8 @@
+Email: test@example.com, Premium: false, Plan: null
+Email: shubham@gmail.com, Premium: false, Plan: null
+Email: test2@example.com, Premium: false, Plan: null
+Email: manual_test_fetch@example.com, Premium: false, Plan: null
+Email: manual_test_otp@example.com, Premium: false, Plan: null
+Email: admin@example.com, Premium: false, Plan: null
+Email: manjushagayke@gmail.com, Premium: true, Plan: yearly
+Email: balugayke1972@gmail.com, Premium: true, Plan: yearly

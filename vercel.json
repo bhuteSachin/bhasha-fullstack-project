@@ -1,0 +1,10 @@
+{
+    "rewrites": [
+        {
+            "source": "/(.*)",
+            "destination": "/index.html"
+        }
+    ],
+    "outputDirectory": "client/dist",
+    "buildCommand": "cd client && npm install --legacy-peer-deps && npm run build"
+}

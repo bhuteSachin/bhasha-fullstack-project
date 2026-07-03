@@ -1,0 +1,10 @@
+{
+    "rewrites": [
+        {
+            "source": "/(.*)",
+            "destination": "/index.html"
+        }
+    ],
+    "installCommand": "npm install --legacy-peer-deps",
+    "outputDirectory": "dist"
+}
