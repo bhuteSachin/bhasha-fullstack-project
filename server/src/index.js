@@ -149,8 +149,10 @@ const io = new Server(httpServer, {
 
 initializeSocket(io);
 
-// Database Connection
-mongoose.connect(process.env.MONGODB_URI, {
+// Strip leading/trailing quotes that might be injected by Kubernetes secrets
+const MONGODB_URI = (process.env.MONGODB_URI || '').replace(/^["']|["']$/g, '');
+
+mongoose.connect(MONGODB_URI, {
     tlsAllowInvalidCertificates: true
 })
     .then(() => {
