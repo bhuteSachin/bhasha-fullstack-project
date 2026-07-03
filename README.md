@@ -44,17 +44,17 @@ graph TD
     User([👤 You / End User]):::user -->|Types URL in Browser| Internet((🌐 Internet)):::internet
     Internet -->|Routes Traffic| ALB[⚖️ AWS Application Load Balancer]:::aws
     
-    subgraph AWS_Cloud [☁️ AWS Cloud Environment]
+    subgraph AWS_Cloud ["☁️ AWS Cloud Environment"]
         ALB -->|Distributes Traffic| EKS_Nodes
         
-        subgraph EKS [☸️ Amazon EKS (Kubernetes Cluster)]
+        subgraph EKS ["☸️ Amazon EKS (Kubernetes Cluster)"]
             EKS_Control[🧠 EKS Control Plane<br/>The Master Brain]:::k8s
             
-            subgraph EKS_Nodes [🖥️ EC2 Auto Scaling Group (Worker Nodes)]
+            subgraph EKS_Nodes ["🖥️ EC2 Auto Scaling Group (Worker Nodes)"]
                 Node1[Node 1: t3.small]:::aws
                 Node2[Node 2: t3.small]:::aws
                 
-                subgraph Pods [📦 Kubernetes Pods]
+                subgraph Pods ["📦 Kubernetes Pods"]
                     Client[🎨 Frontend React Pod<br/>(Nginx)]:::k8s
                     Server[⚙️ Backend Node.js Pod<br/>(Express)]:::k8s
                 end
@@ -68,7 +68,7 @@ graph TD
         Server -->|AI Translations| Gemini[🤖 Google Gemini API]
     end
     
-    subgraph Automation [⚙️ CI/CD Pipeline]
+    subgraph Automation ["⚙️ CI/CD Pipeline"]
         Git[🐙 Push to GitHub]:::cicd --> Action[⚡ GitHub Actions]:::cicd
         Action -->|Builds| Docker[🐳 DockerHub]:::cicd
         Action -->|Deploys New Version| EKS_Control
