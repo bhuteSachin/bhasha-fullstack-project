@@ -46,13 +46,13 @@ export const AdminDashboard = () => {
         setLoading(true);
         try {
             if (activeTab === 'payments') {
-                const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/payment/admin/payments`);
+                const res = await axios.get(`${import.meta.env.VITE_API_URL || ''}/api/payment/admin/payments`);
                 setPayments(res.data);
             } else if (activeTab === 'users') {
-                const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/admin/users`);
+                const res = await axios.get(`${import.meta.env.VITE_API_URL || ''}/api/admin/users`);
                 setUsers(res.data);
             } else if (activeTab === 'pricing') {
-                const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/admin/settings/pricing`);
+                const res = await axios.get(`${import.meta.env.VITE_API_URL || ''}/api/admin/settings/pricing`);
                 setPricing(res.data);
             }
         } catch (error) {
@@ -67,7 +67,7 @@ export const AdminDashboard = () => {
         if (!confirm(`Are you sure you want to ${action} this payment?`)) return;
         setActionLoading(paymentId);
         try {
-            await axios.post(`${import.meta.env.VITE_API_URL}/api/payment/admin/${action}`, { paymentId });
+            await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/payment/admin/${action}`, { paymentId });
             setPayments(prev => prev.filter(p => p._id !== paymentId));
             alert(`Payment ${action}d successfully`);
         } catch (error) {
@@ -82,7 +82,7 @@ export const AdminDashboard = () => {
         if (!confirm("Are you sure?")) return;
         setActionLoading(userId);
         try {
-            const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/admin/users/${userId}/ban`);
+            const res = await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/admin/users/${userId}/ban`);
             setUsers(prev => prev.map(u => u._id === userId ? { ...u, isBanned: res.data.isBanned } : u));
         } catch (error) {
             alert("Failed to ban user");
@@ -95,7 +95,7 @@ export const AdminDashboard = () => {
         if (!confirm("Are you sure? This cannot be undone.")) return;
         setActionLoading(userId);
         try {
-            await axios.delete(`${import.meta.env.VITE_API_URL}/api/admin/users/${userId}`);
+            await axios.delete(`${import.meta.env.VITE_API_URL || ''}/api/admin/users/${userId}`);
             setUsers(prev => prev.filter(u => u._id !== userId));
         } catch (error) {
             alert("Failed to delete user");
@@ -109,7 +109,7 @@ export const AdminDashboard = () => {
         e.preventDefault();
         setActionLoading('pricing');
         try {
-            await axios.post(`${import.meta.env.VITE_API_URL}/api/admin/settings`, { settings: pricing });
+            await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/admin/settings`, { settings: pricing });
             alert("Pricing updated successfully!");
         } catch (error) {
             alert("Failed to update pricing");

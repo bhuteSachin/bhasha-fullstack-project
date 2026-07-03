@@ -85,7 +85,7 @@ export const Pricing = () => {
     });
 
     React.useEffect(() => {
-        axios.get(`${import.meta.env.VITE_API_URL}/api/admin/settings/pricing`)
+        axios.get(`${import.meta.env.VITE_API_URL || ''}/api/admin/settings/pricing`)
             .then(res => setPricing(res.data))
             .catch(err => console.error("Failed to fetch pricing:", err));
     }, []);
@@ -105,7 +105,7 @@ export const Pricing = () => {
         setProcessingRazorpay(true);
         try {
             // Create order on backend
-            const orderRes = await axios.post(`${import.meta.env.VITE_API_URL}/api/payment/create-order`, {
+            const orderRes = await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/payment/create-order`, {
                 email: user.email,
                 plan: selectedPlan
             });
@@ -123,7 +123,7 @@ export const Pricing = () => {
                 handler: async (response: any) => {
                     try {
                         // Verify payment on backend
-                        const verifyRes = await axios.post(`${import.meta.env.VITE_API_URL}/api/payment/verify`, {
+                        const verifyRes = await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/payment/verify`, {
                             razorpay_order_id: response.razorpay_order_id,
                             razorpay_payment_id: response.razorpay_payment_id,
                             razorpay_signature: response.razorpay_signature,
@@ -174,7 +174,7 @@ export const Pricing = () => {
 
         setVerifying(true);
         try {
-            const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/payment/submit-manual`, {
+            const res = await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/payment/submit-manual`, {
                 email: user?.email,
                 plan: selectedPlan,
                 transactionId: transactionId

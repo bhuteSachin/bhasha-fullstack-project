@@ -21,7 +21,7 @@ export const ForgotPassword = () => {
         setSuccessMessage('');
 
         try {
-            await axios.post(`${import.meta.env.VITE_API_URL}/auth/forgot-password`, { email });
+            await axios.post(`${import.meta.env.VITE_API_URL || ''}/auth/forgot-password`, { email });
             setStep('reset');
             setSuccessMessage('OTP sent to your email');
         } catch (err: any) {
@@ -37,7 +37,7 @@ export const ForgotPassword = () => {
         setError('');
 
         try {
-            await axios.post(`${import.meta.env.VITE_API_URL}/auth/reset-password`, {
+            await axios.post(`${import.meta.env.VITE_API_URL || ''}/auth/reset-password`, {
                 email,
                 otp,
                 newPassword

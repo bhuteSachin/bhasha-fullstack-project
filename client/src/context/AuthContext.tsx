@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         if (!token) return;
         try {
             axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-            const response = await axios.get(`${import.meta.env.VITE_API_URL}/auth/me`);
+            const response = await axios.get(`${import.meta.env.VITE_API_URL || ''}/auth/me`);
             setUser(response.data);
         } catch (error) {
             console.error("Failed to fetch user:", error);

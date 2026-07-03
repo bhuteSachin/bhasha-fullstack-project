@@ -27,7 +27,7 @@ export const Signup = () => {
         setError('');
 
         try {
-            await axios.post(`${import.meta.env.VITE_API_URL}/auth/signup-step1`, { email });
+            await axios.post(`${import.meta.env.VITE_API_URL || ''}/auth/signup-step1`, { email });
             setStep('otp');
         } catch (err: any) {
             setError(err.response?.data?.detail || 'Failed to send OTP');
@@ -43,7 +43,7 @@ export const Signup = () => {
         setError('');
 
         try {
-            const res = await axios.post(`${import.meta.env.VITE_API_URL}/auth/signup-step2`, { email, otp });
+            const res = await axios.post(`${import.meta.env.VITE_API_URL || ''}/auth/signup-step2`, { email, otp });
             setSetupToken(res.data.setup_token);
             setStep('details');
         } catch (err: any) {
@@ -60,7 +60,7 @@ export const Signup = () => {
         setError('');
 
         try {
-            const res = await axios.post(`${import.meta.env.VITE_API_URL}/auth/signup-step3`, {
+            const res = await axios.post(`${import.meta.env.VITE_API_URL || ''}/auth/signup-step3`, {
                 setup_token: setupToken,
                 username,
                 password

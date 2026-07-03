@@ -14,7 +14,7 @@ declare global {
     }
 }
 
-const SOCKET_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const SOCKET_URL = import.meta.env.VITE_API_URL ?? (import.meta.env.PROD ? '' : 'http://localhost:5000');
 
 interface Message {
     id: string;
@@ -151,7 +151,7 @@ export const Chat = () => {
 
     const fetchFriendStatus = async (friendId: string) => {
         try {
-            const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/user/${friendId}`, {
+            const res = await axios.get(`${import.meta.env.VITE_API_URL || ''}/api/user/${friendId}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             if (res.data) {
@@ -164,7 +164,7 @@ export const Chat = () => {
 
     const fetchHistory = async (friendId: string) => {
         try {
-            const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/chat/history/${friendId}`, {
+            const res = await axios.get(`${import.meta.env.VITE_API_URL || ''}/api/chat/history/${friendId}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setMessages(res.data);
@@ -252,7 +252,7 @@ export const Chat = () => {
         formData.append('file', file);
 
         try {
-            const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/chat/upload`, formData, {
+            const res = await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/chat/upload`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     Authorization: `Bearer ${token}`
@@ -272,7 +272,7 @@ export const Chat = () => {
                 lang: inputLang,
                 time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
                 type,
-                fileUrl: `${import.meta.env.VITE_API_URL}${fileUrl}`,
+                fileUrl: `${import.meta.env.VITE_API_URL || ''}${fileUrl}`,
                 fileName,
                 fileSize
             };

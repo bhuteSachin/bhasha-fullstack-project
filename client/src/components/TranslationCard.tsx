@@ -59,7 +59,7 @@ export const TranslationCard = () => {
     const fetchHistory = async () => {
         setIsHistoryLoading(true);
         try {
-            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/history?email=${user?.email}`);
+            const response = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/history?email=${user?.email}`);
             if (response.ok) {
                 const data = await response.json();
                 setHistory(data);
@@ -73,7 +73,7 @@ export const TranslationCard = () => {
 
     const handleDeleteHistory = async (id: string) => {
         try {
-            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/history/${id}?email=${user?.email}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/history/${id}?email=${user?.email}`, {
                 method: 'DELETE',
             });
             if (response.ok) {
@@ -86,7 +86,7 @@ export const TranslationCard = () => {
 
     const handleClearHistory = async () => {
         try {
-            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/history?email=${user?.email}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/history?email=${user?.email}`, {
                 method: 'DELETE',
             });
             if (response.ok) {
@@ -101,7 +101,7 @@ export const TranslationCard = () => {
         if (!outputText || !isAuthenticated) return;
 
         try {
-            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/history?email=${user?.email}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/history?email=${user?.email}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -255,7 +255,7 @@ export const TranslationCard = () => {
         try {
             let data;
             if (activeTab === 'text') {
-                const response = await fetch(`${import.meta.env.VITE_API_URL}/translate`, {
+                const response = await fetch(`${import.meta.env.VITE_API_URL || ''}/translate`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -277,7 +277,7 @@ export const TranslationCard = () => {
                 formData.append('dialect', dialect);
                 if (user?.email) formData.append('email', user.email);
 
-                const response = await fetch(`${import.meta.env.VITE_API_URL}/translate/document`, {
+                const response = await fetch(`${import.meta.env.VITE_API_URL || ''}/translate/document`, {
                     method: 'POST',
                     body: formData,
                 });

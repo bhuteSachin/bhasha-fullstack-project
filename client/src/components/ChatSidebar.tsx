@@ -70,7 +70,7 @@ export const ChatSidebar: React.FC<ChatSidebarProps> = ({ onSelectUser, selected
 
     const fetchFriends = async () => {
         try {
-            const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/user/friends`, {
+            const res = await axios.get(`${import.meta.env.VITE_API_URL || ''}/api/user/friends`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setFriends(res.data);
@@ -81,7 +81,7 @@ export const ChatSidebar: React.FC<ChatSidebarProps> = ({ onSelectUser, selected
 
     const fetchRequests = async () => {
         try {
-            const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/user/requests`, {
+            const res = await axios.get(`${import.meta.env.VITE_API_URL || ''}/api/user/requests`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setRequests(res.data);
@@ -93,7 +93,7 @@ export const ChatSidebar: React.FC<ChatSidebarProps> = ({ onSelectUser, selected
     const handleSearch = async () => {
         setLoading(true);
         try {
-            const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/user/search?q=${searchQuery}`, {
+            const res = await axios.get(`${import.meta.env.VITE_API_URL || ''}/api/user/search?q=${searchQuery}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setSearchResults(res.data);
@@ -106,7 +106,7 @@ export const ChatSidebar: React.FC<ChatSidebarProps> = ({ onSelectUser, selected
 
     const sendRequest = async (userId: string) => {
         try {
-            await axios.post(`${import.meta.env.VITE_API_URL}/api/user/request/${userId}`, {}, {
+            await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/user/request/${userId}`, {}, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             alert('Friend request sent!');
@@ -117,7 +117,7 @@ export const ChatSidebar: React.FC<ChatSidebarProps> = ({ onSelectUser, selected
 
     const handleRequest = async (userId: string, action: 'accept' | 'reject') => {
         try {
-            await axios.post(`${import.meta.env.VITE_API_URL}/api/user/request/${userId}/${action}`, {}, {
+            await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/user/request/${userId}/${action}`, {}, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             fetchRequests();

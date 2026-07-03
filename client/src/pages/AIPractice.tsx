@@ -86,7 +86,7 @@ export const AIPractice = () => {
             }));
 
             const response = await axios.post(
-                `${import.meta.env.VITE_API_URL}/api/ai-practice/chat`,
+                `${import.meta.env.VITE_API_URL || ''}/api/ai-practice/chat`,
                 {
                     message: text.trim(),
                     language,
