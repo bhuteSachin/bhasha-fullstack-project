@@ -8,7 +8,6 @@
 name: CD Pipeline
 
 on:
-  workflow_dispatch:
   workflow_run:
     workflows: ["CI Pipeline"]
     types:
@@ -53,20 +52,20 @@ jobs:
       # --- Update Kubernetes manifests with new image tag ---
       - name: Update server deployment image
         run: |
-          cd kubernetes/overlays/prod
+          cd kubernetes/overlays/dev
           kustomize edit set image \
             server=${{ secrets.DOCKERHUB_USERNAME }}/${{ env.SERVER_IMAGE }}:${{ steps.tag.outputs.TAG }}
 
       - name: Update client deployment image
         run: |
-          cd kubernetes/overlays/prod
+          cd kubernetes/overlays/dev
           kustomize edit set image \
             client=${{ secrets.DOCKERHUB_USERNAME }}/${{ env.CLIENT_IMAGE }}:${{ steps.tag.outputs.TAG }}
 
       # --- Deploy to EKS ---
       - name: Deploy with Kustomize
         run: |
-          kubectl apply -k kubernetes/overlays/prod
+          kubectl apply -k kubernetes/overlays/dev
 
       - name: Wait for server rollout
         run: |
