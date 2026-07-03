@@ -56,6 +56,17 @@ jobs:
             --query SecretString \
             --output text | jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' > kubernetes/base/.env
 
+      - name: Verify injected secrets
+        run: |
+          echo "=== .env file keys (values redacted) ==="
+          if [ -f kubernetes/base/.env ]; then
+            cat kubernetes/base/.env | cut -d'=' -f1
+            echo "=== Total lines: $(wc -l < kubernetes/base/.env) ==="
+          else
+            echo "ERROR: .env file was not created!"
+            exit 1
+          fi
+
       # --- Update Kubernetes manifests with new image tag ---
       - name: Update server deployment image
         run: |

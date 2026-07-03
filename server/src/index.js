@@ -149,19 +149,41 @@ const io = new Server(httpServer, {
 
 initializeSocket(io);
 
+// ==============================
+// Startup Diagnostics
+// ==============================
+console.log('=== Server Startup Diagnostics ===');
+console.log('NODE_ENV:', process.env.NODE_ENV);
+console.log('PORT:', process.env.PORT);
+console.log('MONGODB_URI defined:', !!process.env.MONGODB_URI);
+console.log('MONGODB_URI length:', (process.env.MONGODB_URI || '').length);
+console.log('MONGODB_URI starts with:', (process.env.MONGODB_URI || '').substring(0, 20));
+console.log('==================================');
+
 // Strip leading/trailing quotes that might be injected by Kubernetes secrets
 const MONGODB_URI = (process.env.MONGODB_URI || '').replace(/^["']|["']$/g, '');
 
+if (!MONGODB_URI || !MONGODB_URI.startsWith('mongodb')) {
+    console.error('FATAL: MONGODB_URI is missing or invalid. Value starts with:', MONGODB_URI.substring(0, 20));
+    console.error('Available env vars:', Object.keys(process.env).filter(k => !k.startsWith('npm_')).sort().join(', '));
+    process.exit(1);
+}
+
+// Start HTTP server first so Kubernetes probes pass during DB connection
+httpServer.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
+
+// Connect to MongoDB
 mongoose.connect(MONGODB_URI, {
-    tlsAllowInvalidCertificates: true
+    tlsAllowInvalidCertificates: true,
+    serverSelectionTimeoutMS: 30000,
+    connectTimeoutMS: 30000,
 })
     .then(() => {
         console.log('Connected to MongoDB Atlas');
-        httpServer.listen(PORT, () => {
-            console.log(`Server running on port ${PORT}`);
-        });
     })
     .catch((err) => {
-        console.error('MongoDB connection error:', err);
+        console.error('MongoDB connection error:', err.message);
         process.exit(1);
     });
