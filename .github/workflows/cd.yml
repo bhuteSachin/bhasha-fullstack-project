@@ -75,16 +75,39 @@ jobs:
           kubectl apply -k kubernetes/overlays/dev
 
       - name: Wait for server rollout
+        id: server-rollout
+        continue-on-error: true
         run: |
           kubectl rollout status deployment/linguistai-server \
             -n ${{ env.NAMESPACE }} \
             --timeout=300s
 
       - name: Wait for client rollout
+        id: client-rollout
+        continue-on-error: true
         run: |
           kubectl rollout status deployment/linguistai-client \
             -n ${{ env.NAMESPACE }} \
             --timeout=300s
+
+      - name: Debug - Pod Status
+        if: steps.server-rollout.outcome == 'failure' || steps.client-rollout.outcome == 'failure'
+        run: |
+          echo "=== Pod Status ==="
+          kubectl get pods -n ${{ env.NAMESPACE }} -o wide
+          echo ""
+          echo "=== Pod Descriptions ==="
+          kubectl describe pods -n ${{ env.NAMESPACE }}
+          echo ""
+          echo "=== Server Logs ==="
+          kubectl logs -l component=server -n ${{ env.NAMESPACE }} --tail=100 || echo "No server logs"
+          echo ""
+          echo "=== Client Logs ==="
+          kubectl logs -l component=client -n ${{ env.NAMESPACE }} --tail=100 || echo "No client logs"
+          echo ""
+          echo "=== Events ==="
+          kubectl get events -n ${{ env.NAMESPACE }} --sort-by='.lastTimestamp'
+          exit 1
 
       # --- Smoke Test ---
       - name: Smoke test - Health check

@@ -17,6 +17,9 @@ secretGenerator:
     envs:
       - .env
 
+generatorOptions:
+  disableNameSuffixHash: true
+
 commonLabels:
   app.kubernetes.io/part-of: linguistai
   app.kubernetes.io/managed-by: kustomize
