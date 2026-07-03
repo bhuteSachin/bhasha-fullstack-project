@@ -17,7 +17,6 @@ on:
 env:
   AWS_REGION: ap-south-1
   EKS_CLUSTER_NAME: linguistai-cluster
-  ECR_REGISTRY: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-south-1.amazonaws.com
   SERVER_IMAGE: linguistai-server
   CLIENT_IMAGE: linguistai-client
   NAMESPACE: linguistai
@@ -40,9 +39,6 @@ jobs:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Login to Amazon ECR
-        uses: aws-actions/amazon-ecr-login@v2
-
       - name: Update kubeconfig
         run: |
           aws eks update-kubeconfig \
@@ -58,13 +54,13 @@ jobs:
         run: |
           cd kubernetes/overlays/prod
           kustomize edit set image \
-            server=${{ env.ECR_REGISTRY }}/${{ env.SERVER_IMAGE }}:${{ steps.tag.outputs.TAG }}
+            server=${{ secrets.DOCKERHUB_USERNAME }}/${{ env.SERVER_IMAGE }}:${{ steps.tag.outputs.TAG }}
 
       - name: Update client deployment image
         run: |
           cd kubernetes/overlays/prod
           kustomize edit set image \
-            client=${{ env.ECR_REGISTRY }}/${{ env.CLIENT_IMAGE }}:${{ steps.tag.outputs.TAG }}
+            client=${{ secrets.DOCKERHUB_USERNAME }}/${{ env.CLIENT_IMAGE }}:${{ steps.tag.outputs.TAG }}
 
       # --- Deploy to EKS ---
       - name: Deploy with Kustomize

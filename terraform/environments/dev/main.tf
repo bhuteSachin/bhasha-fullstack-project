@@ -64,16 +64,6 @@ module "vpc" {
   tags                = local.common_tags
 }
 
-# ==============================
-# ECR Module
-# ==============================
-module "ecr" {
-  source = "../../modules/ecr"
-
-  project_name = local.project_name
-  environment  = local.environment
-  tags         = local.common_tags
-}
 
 # ==============================
 # EKS Module
@@ -90,7 +80,7 @@ module "eks" {
   private_subnet_ids = module.vpc.private_subnet_ids
 
   # Dev: smaller, fewer nodes
-  node_instance_types = ["t3.medium"]
+  node_instance_types = ["t3.small"]
   capacity_type       = "SPOT"  # Use spot for dev to save costs
   node_desired_size   = 2
   node_min_size       = 1

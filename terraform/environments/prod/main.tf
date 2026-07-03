@@ -64,16 +64,6 @@ module "vpc" {
   tags                 = local.common_tags
 }
 
-# ==============================
-# ECR Module
-# ==============================
-module "ecr" {
-  source = "../../modules/ecr"
-
-  project_name = local.project_name
-  environment  = local.environment
-  tags         = local.common_tags
-}
 
 # ==============================
 # EKS Module

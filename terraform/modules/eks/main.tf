@@ -129,10 +129,6 @@ resource "aws_iam_role_policy_attachment" "eks_cni_policy" {
   role       = aws_iam_role.eks_nodes.name
 }
 
-resource "aws_iam_role_policy_attachment" "ecr_read_only" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
-  role       = aws_iam_role.eks_nodes.name
-}
 
 resource "aws_iam_role_policy_attachment" "cloudwatch_agent" {
   policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
@@ -173,7 +169,6 @@ resource "aws_eks_node_group" "main" {
   depends_on = [
     aws_iam_role_policy_attachment.eks_worker_node_policy,
     aws_iam_role_policy_attachment.eks_cni_policy,
-    aws_iam_role_policy_attachment.ecr_read_only,
   ]
 }
 
