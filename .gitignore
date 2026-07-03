@@ -4,3 +4,9 @@ node_modules/
 .vscode/
 .idea/
 *.log
+
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+*.tfvars
