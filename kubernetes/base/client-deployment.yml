@@ -27,7 +27,7 @@ spec:
         - name: client
           image: client:latest  # Replaced by Kustomize
           ports:
-            - containerPort: 80
+            - containerPort: 8080
               name: http
           resources:
             requests:
@@ -39,7 +39,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /nginx-health
-              port: 80
+              port: 8080
             initialDelaySeconds: 5
             periodSeconds: 30
             timeoutSeconds: 3
@@ -47,7 +47,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /nginx-health
-              port: 80
+              port: 8080
             initialDelaySeconds: 3
             periodSeconds: 10
             timeoutSeconds: 3
