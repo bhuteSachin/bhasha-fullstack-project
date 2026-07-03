@@ -23,9 +23,11 @@ LABEL version="1.0.0"
 
 WORKDIR /app
 
-# Create non-root user
+# Create non-root user and uploads directory
 RUN addgroup -g 1001 -S appgroup && \
-    adduser -S appuser -u 1001 -G appgroup
+    adduser -S appuser -u 1001 -G appgroup && \
+    mkdir -p /app/uploads && \
+    chown -R appuser:appgroup /app/uploads
 
 # Copy production dependencies from deps stage
 COPY --from=deps /app/node_modules ./node_modules
