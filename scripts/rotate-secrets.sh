@@ -1,6 +1,6 @@
 #!/bin/bash
 # ==============================
-# LinguistAI — Secret Rotation Script
+# Bhasha — Secret Rotation Script
 # ==============================
 # Rotates secrets in AWS Secrets Manager and restarts pods
 # Usage: ./scripts/rotate-secrets.sh <environment>
@@ -9,9 +9,9 @@
 set -euo pipefail
 
 ENVIRONMENT="${1:-dev}"
-PROJECT_NAME="linguistai"
+PROJECT_NAME="Bhasha"
 SECRET_NAME="${PROJECT_NAME}/${ENVIRONMENT}/app-secrets"
-NAMESPACE="linguistai"
+NAMESPACE="Bhasha"
 AWS_REGION="ap-south-1"
 
 echo "🔑 Rotating secrets for environment: ${ENVIRONMENT}"
@@ -48,8 +48,8 @@ echo "✅ Secret updated in AWS Secrets Manager"
 
 # Restart deployments to pick up new secrets
 echo "🔄 Restarting deployments..."
-kubectl rollout restart deployment/linguistai-server -n "${NAMESPACE}"
-kubectl rollout status deployment/linguistai-server -n "${NAMESPACE}" --timeout=120s
+kubectl rollout restart deployment/Bhasha-server -n "${NAMESPACE}"
+kubectl rollout status deployment/Bhasha-server -n "${NAMESPACE}" --timeout=120s
 
 echo "✅ Secret rotation complete!"
 echo "⚠️  Note: Active user sessions using old JWT will need to re-authenticate."

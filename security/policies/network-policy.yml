@@ -1,5 +1,5 @@
 # ==============================
-# Network Policies — LinguistAI
+# Network Policies — Bhasha
 # ==============================
 # Restricts network traffic between pods
 
@@ -8,7 +8,7 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: server-network-policy
-  namespace: linguistai
+  namespace: Bhasha
 spec:
   podSelector:
     matchLabels:
@@ -71,7 +71,7 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: client-network-policy
-  namespace: linguistai
+  namespace: Bhasha
 spec:
   podSelector:
     matchLabels:

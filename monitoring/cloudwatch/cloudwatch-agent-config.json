@@ -1,23 +1,37 @@
 {
   "metrics": {
-    "namespace": "LinguistAI",
+    "namespace": "Bhasha",
     "metrics_collected": {
       "cpu": {
-        "measurement": ["cpu_usage_idle", "cpu_usage_user", "cpu_usage_system"],
+        "measurement": [
+          "cpu_usage_idle",
+          "cpu_usage_user",
+          "cpu_usage_system"
+        ],
         "metrics_collection_interval": 60,
         "totalcpu": true
       },
       "mem": {
-        "measurement": ["mem_used_percent", "mem_available"],
+        "measurement": [
+          "mem_used_percent",
+          "mem_available"
+        ],
         "metrics_collection_interval": 60
       },
       "disk": {
-        "measurement": ["used_percent"],
+        "measurement": [
+          "used_percent"
+        ],
         "metrics_collection_interval": 300,
-        "resources": ["*"]
+        "resources": [
+          "*"
+        ]
       },
       "net": {
-        "measurement": ["bytes_sent", "bytes_recv"],
+        "measurement": [
+          "bytes_sent",
+          "bytes_recv"
+        ],
         "metrics_collection_interval": 60
       }
     }
@@ -27,8 +41,8 @@
       "files": {
         "collect_list": [
           {
-            "file_path": "/var/log/containers/*linguistai*.log",
-            "log_group_name": "/eks/linguistai/application",
+            "file_path": "/var/log/containers/*Bhasha*.log",
+            "log_group_name": "/eks/Bhasha/application",
             "log_stream_name": "{hostname}",
             "retention_in_days": 30
           }

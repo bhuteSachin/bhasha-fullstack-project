@@ -1,15 +1,15 @@
 # ==============================
-# LinguistAI — Prod Environment
+# Bhasha — Prod Environment
 # ==============================
 
 terraform {
   required_version = ">= 1.5.0"
 
   backend "s3" {
-    bucket         = "linguistai-terraform-state"
+    bucket         = "Bhasha-terraform-state"
     key            = "prod/terraform.tfstate"
     region         = "ap-south-1"
-    dynamodb_table = "linguistai-terraform-locks"
+    dynamodb_table = "Bhasha-terraform-locks"
     encrypt        = true
   }
 
@@ -26,7 +26,7 @@ provider "aws" {
 
   default_tags {
     tags = {
-      Project     = "linguistai"
+      Project     = "Bhasha"
       Environment = "prod"
       ManagedBy   = "terraform"
     }
@@ -37,9 +37,9 @@ provider "aws" {
 # Local Variables
 # ==============================
 locals {
-  project_name = "linguistai"
+  project_name = "Bhasha"
   environment  = "prod"
-  cluster_name = "linguistai-cluster-prod"
+  cluster_name = "Bhasha-cluster-prod"
 
   common_tags = {
     Project     = local.project_name
@@ -97,7 +97,7 @@ module "security" {
 
   project_name        = local.project_name
   environment         = local.environment
-  github_repo         = "shubham-gayke/linguistai-devops"
+  github_repo         = "shubham-gayke/Bhasha-devops"
   mongodb_uri         = var.mongodb_uri
   jwt_secret          = var.jwt_secret
   gemini_api_key      = var.gemini_api_key

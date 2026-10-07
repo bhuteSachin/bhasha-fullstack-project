@@ -14,7 +14,7 @@ const createTestApp = () => {
 
   // Root route
   app.get('/', (req, res) => {
-    res.status(200).json({ message: 'LinguistAI API Server' });
+    res.status(200).json({ message: 'Bhasha API Server' });
   });
 
   return app;

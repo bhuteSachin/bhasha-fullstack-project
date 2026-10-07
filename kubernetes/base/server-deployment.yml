@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: linguistai-server
-  namespace: linguistai
+  name: Bhasha-server
+  namespace: Bhasha
   labels:
-    app: linguistai
+    app: Bhasha
     component: server
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: linguistai
+      app: Bhasha
       component: server
   strategy:
     type: RollingUpdate
@@ -20,14 +20,14 @@ spec:
   template:
     metadata:
       labels:
-        app: linguistai
+        app: Bhasha
         component: server
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "5000"
         prometheus.io/path: "/metrics"
     spec:
-      serviceAccountName: linguistai-server
+      serviceAccountName: Bhasha-server
       containers:
         - name: server
           image: server:latest  # Replaced by Kustomize
@@ -36,7 +36,7 @@ spec:
               name: http
           envFrom:
             - secretRef:
-                name: linguistai-secrets
+                name: Bhasha-secrets
           env:
             - name: NODE_ENV
               value: "production"
@@ -77,8 +77,8 @@ spec:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: linguistai-server
-  namespace: linguistai
+  name: Bhasha-server
+  namespace: Bhasha
   labels:
-    app: linguistai
+    app: Bhasha
     component: server

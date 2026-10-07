@@ -1,5 +1,5 @@
 # ==============================
-# LinguistAI — Security Module
+# Bhasha — Security Module
 # ==============================
 
 terraform {
@@ -17,7 +17,7 @@ terraform {
 # ==============================
 resource "aws_secretsmanager_secret" "app_secrets" {
   name                    = "${var.project_name}/${var.environment}/app-secrets"
-  description             = "LinguistAI application secrets"
+  description             = "Bhasha application secrets"
   recovery_window_in_days = var.environment == "dev" ? 0 : 30
 
   tags = merge(var.tags, {
@@ -28,12 +28,12 @@ resource "aws_secretsmanager_secret" "app_secrets" {
 resource "aws_secretsmanager_secret_version" "app_secrets" {
   secret_id = aws_secretsmanager_secret.app_secrets.id
   secret_string = jsonencode({
-    MONGODB_URI        = var.mongodb_uri
-    JWT_SECRET         = var.jwt_secret
-    GEMINI_API_KEY     = var.gemini_api_key
-    BREVO_API_KEY      = var.brevo_api_key
-    MAIL_PASSWORD      = var.mail_password
-    RAZORPAY_KEY_ID    = var.razorpay_key_id
+    MONGODB_URI         = var.mongodb_uri
+    JWT_SECRET          = var.jwt_secret
+    GEMINI_API_KEY      = var.gemini_api_key
+    BREVO_API_KEY       = var.brevo_api_key
+    MAIL_PASSWORD       = var.mail_password
+    RAZORPAY_KEY_ID     = var.razorpay_key_id
     RAZORPAY_KEY_SECRET = var.razorpay_key_secret
   })
 }

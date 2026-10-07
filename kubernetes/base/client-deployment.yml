@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: linguistai-client
-  namespace: linguistai
+  name: Bhasha-client
+  namespace: Bhasha
   labels:
-    app: linguistai
+    app: Bhasha
     component: client
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: linguistai
+      app: Bhasha
       component: client
   strategy:
     type: RollingUpdate
@@ -20,7 +20,7 @@ spec:
   template:
     metadata:
       labels:
-        app: linguistai
+        app: Bhasha
         component: client
     spec:
       containers:

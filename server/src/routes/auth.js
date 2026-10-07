@@ -26,7 +26,7 @@ const sendEmail = async (to, subject, text) => {
                 'content-type': 'application/json'
             },
             body: JSON.stringify({
-                sender: { email: process.env.MAIL_FROM || 'noreply@linguistai.com' },
+                sender: { email: process.env.MAIL_FROM || 'noreply@Bhasha.com' },
                 to: [{ email: to }],
                 subject: subject,
                 textContent: text
@@ -80,7 +80,7 @@ router.post('/signup-step1', async (req, res) => {
 
         // Send OTP via Email
         try {
-            await sendEmail(email, 'LinguistAI - Signup OTP', `Your OTP for signup is: ${otp}`);
+            await sendEmail(email, 'Bhasha - Signup OTP', `Your OTP for signup is: ${otp}`);
         } catch (emailError) {
             console.error("Email sending failed:", emailError);
             return res.status(500).json({ detail: `Email Error: ${emailError.message}` });
@@ -229,7 +229,7 @@ router.post('/forgot-password', async (req, res) => {
         console.error(`[DEBUG] Reset OTP for ${email}: ${otp}`);
 
         try {
-            await sendEmail(email, 'LinguistAI - Password Reset', `Your password reset code is: ${otp}`);
+            await sendEmail(email, 'Bhasha - Password Reset', `Your password reset code is: ${otp}`);
         } catch (emailError) {
             console.error("Email sending failed:", emailError);
             return res.status(500).json({ detail: 'Failed to send email' });

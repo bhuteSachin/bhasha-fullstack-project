@@ -308,7 +308,7 @@ export const TranslationCard = () => {
 
         // Add title
         doc.setFontSize(16);
-        doc.text("LinguistAI Translation", 10, 10);
+        doc.text("Bhasha Translation", 10, 10);
 
         // Add metadata
         doc.setFontSize(10);

@@ -1,23 +1,23 @@
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
-  name: linguistai-server-pdb
-  namespace: linguistai
+  name: Bhasha-server-pdb
+  namespace: Bhasha
 spec:
   minAvailable: 1
   selector:
     matchLabels:
-      app: linguistai
+      app: Bhasha
       component: server
 ---
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
-  name: linguistai-client-pdb
-  namespace: linguistai
+  name: Bhasha-client-pdb
+  namespace: Bhasha
 spec:
   minAvailable: 1
   selector:
     matchLabels:
-      app: linguistai
+      app: Bhasha
       component: client

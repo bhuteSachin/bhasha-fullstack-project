@@ -18,7 +18,7 @@ FROM node:22-alpine AS production
 
 # Add labels for better image management
 LABEL maintainer="Shubham Gayke"
-LABEL app="linguistai-server"
+LABEL app="Bhasha-server"
 LABEL version="1.0.0"
 
 WORKDIR /app

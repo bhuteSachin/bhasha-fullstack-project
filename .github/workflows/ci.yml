@@ -1,5 +1,5 @@
 # ==============================
-# LinguistAI — CI Pipeline
+# Bhasha — CI Pipeline
 # ==============================
 # Triggers on push/PR to main and dev branches
 # Stages: Lint → Test → SonarQube → Build → Trivy Scan → Push to ECR
@@ -15,8 +15,8 @@ on:
 
 env:
   AWS_REGION: ap-south-1
-  SERVER_IMAGE: linguistai-server
-  CLIENT_IMAGE: linguistai-client
+  SERVER_IMAGE: Bhasha-server
+  CLIENT_IMAGE: Bhasha-client
 
 jobs:
   # ==============================

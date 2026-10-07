@@ -5,7 +5,7 @@
   <img src="https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white" />
   <img src="https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white" />
 
-  <h1>🚀 LinguistAI - Full-Stack DevOps & Cloud Infrastructure</h1>
+  <h1>🚀 Bhasha - Full-Stack DevOps & Cloud Infrastructure</h1>
   <p><strong>A complete journey of taking a web application from local development to a highly scalable, automated AWS production environment!</strong></p>
 </div>
 
@@ -13,9 +13,7 @@
 
 ## 📖 Introduction (For Beginners)
 
-Hello! 👋 If you are a recruiter, interviewer, or a fresher looking to understand how real-world applications are hosted in the cloud, you are in the right place.
-
-**LinguistAI** is a language translation and chat application. But the **real magic** of this repository is not just the app itself—it's **how the app is hosted and delivered**. 
+**Bhasha** is a language translation and chat application. But the **real magic** of this repository is not just the app itself—it's **how the app is hosted and delivered**. 
 
 In the real world, you can't just run an app on your laptop. You need to package it, put it on powerful servers, make sure it never crashes, and automate how new updates are launched. This project demonstrates exactly how to do that using modern **DevOps** tools.
 
@@ -122,8 +120,8 @@ If you want to create this exact cloud infrastructure on your own AWS account, f
 
 ### Step 1: Clone the Code
 ```bash
-git clone https://github.com/shubham-gayke/linguistai-devops.git
-cd linguistai-devops
+git clone https://github.com/shubham-gayke/Bhasha-devops.git
+cd Bhasha-devops
 ```
 
 ### Step 2: Build the AWS Infrastructure
@@ -138,17 +136,17 @@ terraform apply --auto-approve
 
 ### Step 3: Connect your Terminal to the Cluster
 ```bash
-aws eks update-kubeconfig --name linguistai-cluster-dev --region ap-south-1
+aws eks update-kubeconfig --name Bhasha-cluster-dev --region ap-south-1
 ```
 
 ### Step 4: Add your Passwords (Secrets)
 Never put passwords in code! We inject them directly into Kubernetes.
 ```bash
-kubectl create namespace linguistai
-kubectl create secret generic linguistai-secrets \
+kubectl create namespace Bhasha
+kubectl create secret generic Bhasha-secrets \
   --from-literal=MONGODB_URI="your_mongodb_uri" \
   --from-literal=GEMINI_API_KEY="your_api_key" \
-  --namespace=linguistai
+  --namespace=Bhasha
 ```
 
 ### Step 5: Deploy the App
@@ -158,7 +156,7 @@ kubectl apply -k kubernetes/base
 
 ### Step 6: Get your Live URL
 ```bash
-kubectl get svc linguistai-client -n linguistai
+kubectl get svc Bhasha-client -n Bhasha
 ```
 Find the `EXTERNAL-IP` (it looks like a long AWS link) and paste it into your browser to see the live app!
 
@@ -166,8 +164,8 @@ Find the `EXTERNAL-IP` (it looks like a long AWS link) and paste it into your br
 
 ## 👨‍💻 About the Author
 
-**Shubham Gayke**  
+**Sachin Bhute**  
 *Passionate about Cloud, Automation, and making things scale.*  
-**Skills:** Linux | AWS | Kubernetes | Terraform | Docker | CI/CD
+**Skills:** FullStack | Linux | AWS | Kubernetes | Terraform | Java | Docker | CI/CD
 
 ⭐ *Thank you for checking out my project!*

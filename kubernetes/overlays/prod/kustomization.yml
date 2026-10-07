@@ -11,7 +11,7 @@ patches:
   # Production scaling
   - target:
       kind: Deployment
-      name: linguistai-server
+      name: Bhasha-server
     patch: |
       - op: replace
         path: /spec/replicas
@@ -19,7 +19,7 @@ patches:
 
   - target:
       kind: Deployment
-      name: linguistai-client
+      name: Bhasha-client
     patch: |
       - op: replace
         path: /spec/replicas

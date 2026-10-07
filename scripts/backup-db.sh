@@ -1,6 +1,6 @@
 #!/bin/bash
 # ==============================
-# LinguistAI — MongoDB Atlas Backup Verification
+# Bhasha — MongoDB Atlas Backup Verification
 # ==============================
 # Verifies that MongoDB Atlas automated backups are running
 # Usage: ./scripts/backup-db.sh

@@ -1,5 +1,5 @@
 # ==============================
-# LinguistAI — Weekly Security Scan
+# Bhasha — Weekly Security Scan
 # ==============================
 # Runs every Monday at 6:00 AM UTC
 # Scans dependencies and Docker images for vulnerabilities
@@ -52,10 +52,10 @@ jobs:
         include:
           - context: ./server
             dockerfile: server/Dockerfile
-            image-name: linguistai-server
+            image-name: Bhasha-server
           - context: ./client
             dockerfile: client/Dockerfile
-            image-name: linguistai-client
+            image-name: Bhasha-client
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -94,7 +94,7 @@ jobs:
       - name: OWASP Dependency Check
         uses: dependency-check/Dependency-Check_Action@main
         with:
-          project: 'linguistai'
+          project: 'Bhasha'
           path: '.'
           format: 'HTML'
           args: >

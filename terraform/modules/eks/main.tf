@@ -1,5 +1,5 @@
 # ==============================
-# LinguistAI — EKS Module
+# Bhasha — EKS Module
 # ==============================
 
 terraform {

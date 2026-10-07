@@ -1,5 +1,5 @@
 # ==============================
-# LinguistAI — Bastion Host Setup
+# Bhasha — Bastion Host Setup
 # ==============================
 # Usage: ansible-playbook playbooks/setup-bastion.yml -i inventory/dev.yml
 # ==============================
@@ -9,7 +9,7 @@
   hosts: role_bastion
   become: true
   vars:
-    eks_cluster_name: "linguistai-cluster-dev"
+    eks_cluster_name: "Bhasha-cluster-dev"
     aws_region: "ap-south-1"
 
   roles:

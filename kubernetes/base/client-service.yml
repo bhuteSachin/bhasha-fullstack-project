@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: linguistai-client
-  namespace: linguistai
+  name: Bhasha-client
+  namespace: Bhasha
   labels:
-    app: linguistai
+    app: Bhasha
     component: client
 spec:
   type: LoadBalancer
@@ -14,5 +14,5 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app: linguistai
+    app: Bhasha
     component: client

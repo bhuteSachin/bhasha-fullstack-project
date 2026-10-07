@@ -11,7 +11,7 @@ variable "environment" {
 variable "github_repo" {
   description = "GitHub repository (org/repo)"
   type        = string
-  default     = "shubham-gayke/linguistai-devops"
+  default     = "shubham-gayke/Bhasha-devops"
 }
 
 variable "mongodb_uri" {

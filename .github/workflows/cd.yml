@@ -1,5 +1,5 @@
 # ==============================
-# LinguistAI — CD Pipeline
+# Bhasha — CD Pipeline
 # ==============================
 # Triggers after CI completes on main branch
 # Deploys to EKS cluster
@@ -16,10 +16,10 @@ on:
 
 env:
   AWS_REGION: ap-south-1
-  EKS_CLUSTER_NAME: linguistai-cluster-dev
-  SERVER_IMAGE: linguistai-server
-  CLIENT_IMAGE: linguistai-client
-  NAMESPACE: linguistai
+  EKS_CLUSTER_NAME: Bhasha-cluster-dev
+  SERVER_IMAGE: Bhasha-server
+  CLIENT_IMAGE: Bhasha-client
+  NAMESPACE: Bhasha
 
 jobs:
   deploy:
@@ -52,7 +52,7 @@ jobs:
       - name: Inject Secrets
         run: |
           aws secretsmanager get-secret-value \
-            --secret-id linguistai/dev/app-secrets \
+            --secret-id Bhasha/dev/app-secrets \
             --query SecretString \
             --output text | jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' > kubernetes/base/.env
 
@@ -89,7 +89,7 @@ jobs:
         id: server-rollout
         continue-on-error: true
         run: |
-          kubectl rollout status deployment/linguistai-server \
+          kubectl rollout status deployment/Bhasha-server \
             -n ${{ env.NAMESPACE }} \
             --timeout=300s
 
@@ -97,7 +97,7 @@ jobs:
         id: client-rollout
         continue-on-error: true
         run: |
-          kubectl rollout status deployment/linguistai-client \
+          kubectl rollout status deployment/Bhasha-client \
             -n ${{ env.NAMESPACE }} \
             --timeout=300s
 
@@ -124,13 +124,13 @@ jobs:
       - name: Smoke test - Health check
         run: |
           # Get the server service endpoint
-          SERVER_URL=$(kubectl get svc linguistai-server \
+          SERVER_URL=$(kubectl get svc Bhasha-server \
             -n ${{ env.NAMESPACE }} \
             -o jsonpath='{.status.loadBalancer.ingress[0].hostname}' 2>/dev/null || echo "")
 
           if [ -z "$SERVER_URL" ]; then
             echo "Using port-forward for smoke test..."
-            kubectl port-forward svc/linguistai-server 5000:5000 \
+            kubectl port-forward svc/Bhasha-server 5000:5000 \
               -n ${{ env.NAMESPACE }} &
             sleep 5
             SERVER_URL="http://localhost:5000"
