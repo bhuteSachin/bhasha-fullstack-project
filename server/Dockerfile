@@ -17,7 +17,7 @@ RUN npm ci --only=production
 FROM node:22-alpine AS production
 
 # Add labels for better image management
-LABEL maintainer="Shubham Gayke"
+LABEL maintainer="Sachin Bhute"
 LABEL app="Bhasha-server"
 LABEL version="1.0.0"
 

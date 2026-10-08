@@ -11,7 +11,7 @@ variable "environment" {
 variable "github_repo" {
   description = "GitHub repository (org/repo)"
   type        = string
-  default     = "shubham-gayke/Bhasha-devops"
+  default     = "sachin-bhute/Bhasha-devops"
 }
 
 variable "mongodb_uri" {
@@ -60,4 +60,14 @@ variable "tags" {
   description = "Common tags"
   type        = map(string)
   default     = {}
+}
+
+variable "eks_oidc_provider_arn" {
+  description = "EKS OIDC provider ARN"
+  type        = string
+}
+
+variable "eks_oidc_provider_url" {
+  description = "EKS OIDC provider URL"
+  type        = string
 }

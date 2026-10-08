@@ -15,7 +15,7 @@ on:
     branches: [main]
 
 env:
-  AWS_REGION: ap-south-1
+  AWS_REGION: us-east-1
   EKS_CLUSTER_NAME: Bhasha-cluster-dev
   SERVER_IMAGE: Bhasha-server
   CLIENT_IMAGE: Bhasha-client

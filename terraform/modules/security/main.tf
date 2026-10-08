@@ -107,3 +107,63 @@ resource "aws_iam_role_policy" "github_actions" {
     ]
   })
 }
+
+locals {
+  eks_oidc_issuer = replace(var.eks_oidc_provider_url, "https://", "")
+}
+
+# ==============================
+# IAM Role for External Secrets Operator
+# ==============================
+
+resource "aws_iam_role" "external_secrets" {
+  name = "${var.project_name}-external-secrets-${var.environment}"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+
+    Statement = [
+      {
+        Effect = "Allow"
+
+        Principal = {
+          Federated = var.eks_oidc_provider_arn
+        }
+
+        Action = "sts:AssumeRoleWithWebIdentity"
+
+        Condition = {
+          StringEquals = {
+            "${var.eks_oidc_provider_url}:aud" = "sts.amazonaws.com"
+
+            "${var.eks_oidc_provider_url}:sub" = "system:serviceaccount:external-secrets:external-secrets"
+          }
+        }
+      }
+    ]
+  })
+
+  tags = var.tags
+}
+
+resource "aws_iam_role_policy" "external_secrets" {
+  name = "${var.project_name}-external-secrets-policy"
+  role = aws_iam_role.external_secrets.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+
+    Statement = [
+      {
+        Effect = "Allow"
+
+        Action = [
+          "secretsmanager:GetSecretValue",
+          "secretsmanager:DescribeSecret"
+        ]
+
+        Resource = aws_secretsmanager_secret.app_secrets.arn
+      }
+    ]
+  })
+}

@@ -8,7 +8,7 @@ terraform {
   backend "s3" {
     bucket         = "Bhasha-terraform-state"
     key            = "prod/terraform.tfstate"
-    region         = "ap-south-1"
+    region         = "us-east-1"
     dynamodb_table = "Bhasha-terraform-locks"
     encrypt        = true
   }
@@ -97,7 +97,7 @@ module "security" {
 
   project_name        = local.project_name
   environment         = local.environment
-  github_repo         = "shubham-gayke/Bhasha-devops"
+  github_repo         = "sachin-bhute/Bhasha-devops"
   mongodb_uri         = var.mongodb_uri
   jwt_secret          = var.jwt_secret
   gemini_api_key      = var.gemini_api_key

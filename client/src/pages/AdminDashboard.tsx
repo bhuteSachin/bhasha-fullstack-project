@@ -34,7 +34,7 @@ export const AdminDashboard = () => {
     const [loading, setLoading] = useState(true);
     const [actionLoading, setActionLoading] = useState<string | null>(null);
 
-    const isAdmin = user?.email === 'shubhamgayke9168@gmail.com';
+    const isAdmin = user?.email === 'harpreetmate@gmail.com';
 
     useEffect(() => {
         if (!user) { navigate('/login'); return; }
@@ -140,8 +140,8 @@ export const AdminDashboard = () => {
                                 key={tab}
                                 onClick={() => setActiveTab(tab as any)}
                                 className={`px-4 py-2 rounded-lg capitalize font-medium transition-all ${activeTab === tab
-                                        ? 'bg-primary-600 text-white'
-                                        : 'text-dark-muted hover:text-white hover:bg-white/5'
+                                    ? 'bg-primary-600 text-white'
+                                    : 'text-dark-muted hover:text-white hover:bg-white/5'
                                     }`}
                             >
                                 {tab}

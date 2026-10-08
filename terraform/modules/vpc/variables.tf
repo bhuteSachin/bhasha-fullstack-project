@@ -29,7 +29,7 @@ variable "private_subnet_cidrs" {
 variable "availability_zones" {
   description = "AWS availability zones"
   type        = list(string)
-  default     = ["ap-south-1a", "ap-south-1b"]
+  default     = ["us-east-1a", "us-east-1b"]
 }
 
 variable "cluster_name" {

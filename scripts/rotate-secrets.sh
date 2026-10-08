@@ -12,7 +12,7 @@ ENVIRONMENT="${1:-dev}"
 PROJECT_NAME="Bhasha"
 SECRET_NAME="${PROJECT_NAME}/${ENVIRONMENT}/app-secrets"
 NAMESPACE="Bhasha"
-AWS_REGION="ap-south-1"
+AWS_REGION="us-east-1"
 
 echo "🔑 Rotating secrets for environment: ${ENVIRONMENT}"
 
@@ -28,7 +28,7 @@ CURRENT_SECRET=$(aws secretsmanager get-secret-value \
     --secret-id "${SECRET_NAME}" \
     --region "${AWS_REGION}" \
     --query 'SecretString' \
-    --output text)
+--output text)
 
 echo "✅ Current secret retrieved"
 
@@ -40,9 +40,9 @@ echo "🆕 Generated new JWT secret"
 UPDATED_SECRET=$(echo "${CURRENT_SECRET}" | jq --arg jwt "${NEW_JWT_SECRET}" '.JWT_SECRET = $jwt')
 
 aws secretsmanager put-secret-value \
-    --secret-id "${SECRET_NAME}" \
-    --secret-string "${UPDATED_SECRET}" \
-    --region "${AWS_REGION}"
+--secret-id "${SECRET_NAME}" \
+--secret-string "${UPDATED_SECRET}" \
+--region "${AWS_REGION}"
 
 echo "✅ Secret updated in AWS Secrets Manager"
 

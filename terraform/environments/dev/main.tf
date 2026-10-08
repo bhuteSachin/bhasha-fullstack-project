@@ -6,11 +6,11 @@ terraform {
   required_version = ">= 1.5.0"
 
   backend "s3" {
-    bucket         = "Bhasha-terraform-state"
-    key            = "dev/terraform.tfstate"
-    region         = "ap-south-1"
-    dynamodb_table = "Bhasha-terraform-locks"
-    encrypt        = true
+    bucket = "bhasha-terraform-state"
+    key    = "dev/terraform.tfstate"
+    region = "us-east-1"
+    # dynamodb_table = "bhasha-terraform-locks"
+    encrypt = true
   }
 
   required_providers {
@@ -95,9 +95,14 @@ module "eks" {
 module "security" {
   source = "../../modules/security"
 
-  project_name        = local.project_name
-  environment         = local.environment
-  github_repo         = "shubham-gayke/Bhasha-devops"
+  project_name = local.project_name
+  environment  = local.environment
+
+  github_repo = "sachin-bhute/Bhasha-devops"
+
+  eks_oidc_provider_arn = module.eks.oidc_provider_arn
+  eks_oidc_provider_url = module.eks.oidc_provider_url
+
   mongodb_uri         = var.mongodb_uri
   jwt_secret          = var.jwt_secret
   gemini_api_key      = var.gemini_api_key
@@ -105,5 +110,6 @@ module "security" {
   mail_password       = var.mail_password
   razorpay_key_id     = var.razorpay_key_id
   razorpay_key_secret = var.razorpay_key_secret
-  tags                = local.common_tags
+
+  tags = local.common_tags
 }

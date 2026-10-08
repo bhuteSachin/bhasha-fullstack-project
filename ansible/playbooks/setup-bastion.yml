@@ -10,7 +10,7 @@
   become: true
   vars:
     eks_cluster_name: "Bhasha-cluster-dev"
-    aws_region: "ap-south-1"
+    aws_region: "us-east-1"
 
   roles:
     - common

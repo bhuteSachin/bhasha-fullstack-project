@@ -120,8 +120,7 @@ If you want to create this exact cloud infrastructure on your own AWS account, f
 
 ### Step 1: Clone the Code
 ```bash
-git clone https://github.com/shubham-gayke/Bhasha-devops.git
-cd Bhasha-devops
+git clone https://github.com/sachin-bhute/bhasha-fullstack-project.git
 ```
 
 ### Step 2: Build the AWS Infrastructure
@@ -136,7 +135,7 @@ terraform apply --auto-approve
 
 ### Step 3: Connect your Terminal to the Cluster
 ```bash
-aws eks update-kubeconfig --name Bhasha-cluster-dev --region ap-south-1
+aws eks update-kubeconfig --name Bhasha-cluster-dev --region us-east-1
 ```
 
 ### Step 4: Add your Passwords (Secrets)
