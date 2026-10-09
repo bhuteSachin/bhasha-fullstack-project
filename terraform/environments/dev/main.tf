@@ -74,7 +74,7 @@ module "eks" {
   project_name       = local.project_name
   environment        = local.environment
   cluster_name       = local.cluster_name
-  kubernetes_version = "1.30"
+  kubernetes_version = var.kubernetes_version
   vpc_id             = module.vpc.vpc_id
   public_subnet_ids  = module.vpc.public_subnet_ids
   private_subnet_ids = module.vpc.private_subnet_ids
@@ -98,7 +98,7 @@ module "security" {
   project_name = local.project_name
   environment  = local.environment
 
-  github_repo = "sachin-bhute/Bhasha-devops"
+  github_repo = "bhuteSachin/bhasha-fullstack-project"
 
   eks_oidc_provider_arn = module.eks.oidc_provider_arn
   eks_oidc_provider_url = module.eks.oidc_provider_url

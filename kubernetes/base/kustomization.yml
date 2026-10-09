@@ -1,7 +1,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: Bhasha
+namespace: bhasha
 
 resources:
   - namespace.yml
@@ -13,7 +13,7 @@ resources:
   - hpa.yml
 
 secretGenerator:
-  - name: Bhasha-secrets
+  - name: bhasha-secrets
     envs:
       - .env
 
@@ -21,5 +21,5 @@ generatorOptions:
   disableNameSuffixHash: true
 
 commonLabels:
-  app.kubernetes.io/part-of: Bhasha
+  app.kubernetes.io/part-of: bhasha
   app.kubernetes.io/managed-by: kustomize

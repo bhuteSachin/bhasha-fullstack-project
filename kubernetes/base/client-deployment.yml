@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: Bhasha-client
-  namespace: Bhasha
+  name: bhasha-client
+  namespace: bhasha
   labels:
-    app: Bhasha
+    app: bhasha
     component: client
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: Bhasha
+      app: bhasha
       component: client
   strategy:
     type: RollingUpdate
@@ -20,7 +20,7 @@ spec:
   template:
     metadata:
       labels:
-        app: Bhasha
+        app: bhasha
         component: client
     spec:
       containers:

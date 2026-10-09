@@ -46,3 +46,8 @@ variable "razorpay_key_secret" {
   sensitive   = true
 }
 
+variable "kubernetes_version" {
+  description = "Kubernetes version"
+  type        = string
+  default     = "1.37"
+}

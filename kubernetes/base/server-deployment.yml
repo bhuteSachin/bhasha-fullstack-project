@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: Bhasha-server
-  namespace: Bhasha
+  name: bhasha-server
+  namespace: bhasha
   labels:
-    app: Bhasha
+    app: bhasha
     component: server
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: Bhasha
+      app: bhasha
       component: server
   strategy:
     type: RollingUpdate
@@ -20,14 +20,14 @@ spec:
   template:
     metadata:
       labels:
-        app: Bhasha
+        app: bhasha
         component: server
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "5000"
         prometheus.io/path: "/metrics"
     spec:
-      serviceAccountName: Bhasha-server
+      serviceAccountName: bhasha-server
       containers:
         - name: server
           image: server:latest  # Replaced by Kustomize
@@ -36,7 +36,7 @@ spec:
               name: http
           envFrom:
             - secretRef:
-                name: Bhasha-secrets
+                name: bhasha-secrets
           env:
             - name: NODE_ENV
               value: "production"
@@ -77,8 +77,8 @@ spec:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: Bhasha-server
-  namespace: Bhasha
+  name: bhasha-server
+  namespace: bhasha
   labels:
-    app: Bhasha
+    app: bhasha
     component: server

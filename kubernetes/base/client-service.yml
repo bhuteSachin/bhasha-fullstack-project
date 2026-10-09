@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: Bhasha-client
-  namespace: Bhasha
+  name: bhasha-client
+  namespace: bhasha
   labels:
-    app: Bhasha
+    app: bhasha
     component: client
 spec:
   type: LoadBalancer
@@ -14,5 +14,5 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app: Bhasha
+    app: bhasha
     component: client
