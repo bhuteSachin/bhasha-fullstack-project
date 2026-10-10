@@ -12,7 +12,7 @@ services:
     build:
       context: ./server
       dockerfile: Dockerfile
-    container_name: Bhasha-server-prod
+    container_name: bhasha-server-prod
     restart: always
     expose:
       - "5000"
@@ -21,7 +21,7 @@ services:
     environment:
       - NODE_ENV=production
     networks:
-      - Bhasha-network
+      - bhasha-network
     deploy:
       resources:
         limits:
@@ -44,7 +44,7 @@ services:
     build:
       context: ./client
       dockerfile: Dockerfile
-    container_name: Bhasha-client-prod
+    container_name: bhasha-client-prod
     restart: always
     ports:
       - "80:80"
@@ -52,7 +52,7 @@ services:
       server:
         condition: service_healthy
     networks:
-      - Bhasha-network
+      - bhasha-network
     deploy:
       resources:
         limits:
@@ -72,6 +72,6 @@ services:
 # Networks
 # ==============================
 networks:
-  Bhasha-network:
+  bhasha-network:
     driver: bridge
-    name: Bhasha-network-prod
+    name: bhasha-network-prod

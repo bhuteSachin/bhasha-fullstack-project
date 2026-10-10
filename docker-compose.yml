@@ -12,7 +12,7 @@ services:
     build:
       context: ./server
       dockerfile: Dockerfile.dev
-    container_name: Bhasha-server
+    container_name: bhasha-server
     restart: unless-stopped
     ports:
       - "5000:5000"
@@ -24,7 +24,7 @@ services:
       - ./server:/app
       - /app/node_modules
     networks:
-      - Bhasha-network
+      - bhasha-network
     healthcheck:
       test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:5000/health" ]
       interval: 30s
@@ -39,7 +39,7 @@ services:
     build:
       context: ./client
       dockerfile: Dockerfile.dev
-    container_name: Bhasha-client
+    container_name: bhasha-client
     restart: unless-stopped
     ports:
       - "5173:5173"
@@ -52,12 +52,12 @@ services:
       server:
         condition: service_healthy
     networks:
-      - Bhasha-network
+      - bhasha-network
 
 # ==============================
 # Networks
 # ==============================
 networks:
-  Bhasha-network:
+  bhasha-network:
     driver: bridge
-    name: Bhasha-network
+    name: bhasha-network

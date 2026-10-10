@@ -6,8 +6,7 @@ import { LanguageSelector } from './LanguageSelector';
 import { HistoryModal } from './HistoryModal';
 import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
-import { ReactTransliterate } from "react-transliterate";
-import "react-transliterate/dist/index.css";
+import Sanscript from "@indic-transliteration/sanscript";
 
 const LANGUAGES = [
     { code: 'en', name: 'English' },
@@ -460,23 +459,22 @@ export const TranslationCard = () => {
                         <div className="relative h-full">
                             {activeTab === 'text' ? (
                                 <>
-                                    {(sourceLang === 'hi' || sourceLang === 'mr') ? (
-                                        <ReactTransliterate
-                                            value={inputText}
-                                            onChangeText={(text) => setInputText(text)}
-                                            lang={sourceLang}
-                                            placeholder="Enter text here... (Type in English to transliterate)"
-                                            className="w-full h-60 md:h-80 bg-dark-input backdrop-blur-md border border-white/10 rounded-xl p-4 md:p-6 resize-none focus:outline-none focus:border-primary-500/50 focus:bg-dark-input/80 transition-all text-base md:text-lg placeholder-dark-muted font-normal leading-relaxed text-white shadow-inner"
-                                            containerClassName="w-full h-full"
-                                        />
-                                    ) : (
-                                        <textarea
-                                            value={inputText}
-                                            onChange={(e) => setInputText(e.target.value)}
-                                            placeholder="Enter text here..."
-                                            className="w-full h-60 md:h-80 bg-dark-input backdrop-blur-md border border-white/10 rounded-xl p-4 md:p-6 resize-none focus:outline-none focus:border-primary-500/50 focus:bg-dark-input/80 transition-all text-base md:text-lg placeholder-dark-muted font-normal leading-relaxed text-white shadow-inner"
-                                        />
-                                    )}
+                                    <textarea
+                                        value={inputText}
+                                        onChange={(e) => setInputText(e.target.value)}
+                                        onBlur={(e) => {
+                                            if ((sourceLang === 'hi' || sourceLang === 'mr') && e.currentTarget.value.trim()) { setInputText(Sanscript.t(e.currentTarget.value, 'itrans', 'devanagari')); }
+                                        }}
+                                        placeholder={
+                                            sourceLang === 'hi' || sourceLang === 'mr'
+                                                ? 'English mein type karein, jaise namaste'
+                                                : 'Enter text here...'}
+                                        className="w-full h-60 md:h-80 bg-dark-input 
+                                        backdrop-blur-md border border-white/10 rounded-xl p-4 md:p-6 resize-none 
+                                        focus:outline-none focus:border-primary-500/50 focus:bg-dark-input/80 
+                                        transition-all text-base md:text-lg placeholder-dark-muted font-normal 
+                                        leading-relaxed text-white shadow-inner" />
+
                                     <div className="absolute bottom-4 right-4 text-xs text-dark-muted font-mono bg-black/20 px-2 py-1 rounded backdrop-blur-sm">
                                         {inputText.length} chars
                                     </div>
