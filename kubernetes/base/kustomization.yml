@@ -4,7 +4,6 @@ kind: Kustomization
 namespace: bhasha
 
 resources:
-  - namespace.yml
   - server-deployment.yml
   - server-service.yml
   - client-deployment.yml
