@@ -1,5 +1,5 @@
 # ==============================
-# Network Policies — Bhasha
+# Network Policies — bhasha
 # ==============================
 # Restricts network traffic between pods
 
@@ -8,7 +8,7 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: server-network-policy
-  namespace: Bhasha
+  namespace: bhasha
 spec:
   podSelector:
     matchLabels:
@@ -71,7 +71,7 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: client-network-policy
-  namespace: Bhasha
+  namespace: bhasha
 spec:
   podSelector:
     matchLabels:

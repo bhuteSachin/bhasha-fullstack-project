@@ -1,15 +1,15 @@
 # ==============================
-# Bhasha — Prod Environment
+# bhasha — Prod Environment
 # ==============================
 
 terraform {
   required_version = ">= 1.5.0"
 
   backend "s3" {
-    bucket         = "Bhasha-terraform-state"
+    bucket         = "bhasha-terraform-state"
     key            = "prod/terraform.tfstate"
     region         = "us-east-1"
-    dynamodb_table = "Bhasha-terraform-locks"
+    dynamodb_table = "bhasha-terraform-locks"
     encrypt        = true
   }
 
@@ -26,7 +26,7 @@ provider "aws" {
 
   default_tags {
     tags = {
-      Project     = "Bhasha"
+      Project     = "bhasha"
       Environment = "prod"
       ManagedBy   = "terraform"
     }
@@ -37,9 +37,9 @@ provider "aws" {
 # Local Variables
 # ==============================
 locals {
-  project_name = "Bhasha"
+  project_name = "bhasha"
   environment  = "prod"
-  cluster_name = "Bhasha-cluster-prod"
+  cluster_name = "bhasha-cluster-prod"
 
   common_tags = {
     Project     = local.project_name

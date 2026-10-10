@@ -1,5 +1,5 @@
 # ==============================
-# Bhasha — Bastion Host Setup
+# bhasha — Bastion Host Setup
 # ==============================
 # Usage: ansible-playbook playbooks/setup-bastion.yml -i inventory/dev.yml
 # ==============================
@@ -9,7 +9,7 @@
   hosts: role_bastion
   become: true
   vars:
-    eks_cluster_name: "Bhasha-cluster-dev"
+    eks_cluster_name: "bhasha-cluster-dev"
     aws_region: "us-east-1"
 
   roles:

@@ -1,5 +1,5 @@
 # ==============================
-# Bhasha — Security Module
+# bhasha — Security Module
 # ==============================
 
 terraform {
@@ -17,7 +17,7 @@ terraform {
 # ==============================
 resource "aws_secretsmanager_secret" "app_secrets" {
   name                    = "${var.project_name}/${var.environment}/app-secrets"
-  description             = "Bhasha application secrets"
+  description             = "bhasha application secrets"
   recovery_window_in_days = var.environment == "dev" ? 0 : 30
 
   tags = merge(var.tags, {

@@ -9,7 +9,7 @@ patches:
   # Scale down for dev
   - target:
       kind: Deployment
-      name: Bhasha-server
+      name: bhasha-server
     patch: |
       - op: replace
         path: /spec/replicas
@@ -29,7 +29,7 @@ patches:
 
   - target:
       kind: Deployment
-      name: Bhasha-client
+      name: bhasha-client
     patch: |
       - op: replace
         path: /spec/replicas
@@ -38,7 +38,7 @@ patches:
   # Lower HPA limits for dev
   - target:
       kind: HorizontalPodAutoscaler
-      name: Bhasha-server-hpa
+      name: bhasha-server-hpa
     patch: |
       - op: replace
         path: /spec/minReplicas

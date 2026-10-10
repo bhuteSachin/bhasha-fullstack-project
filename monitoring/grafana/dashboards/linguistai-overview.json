@@ -19,7 +19,7 @@
       },
       "targets": [
         {
-          "expr": "rate(http_requests_total{namespace=\"Bhasha\"}[5m])",
+          "expr": "rate(http_requests_total{namespace=\"bhasha\"}[5m])",
           "legendFormat": "{{method}} {{route}} {{status}}"
         }
       ]
@@ -35,7 +35,7 @@
       },
       "targets": [
         {
-          "expr": "rate(http_requests_total{namespace=\"Bhasha\",status=~\"5..\"}[5m]) / rate(http_requests_total{namespace=\"Bhasha\"}[5m]) * 100"
+          "expr": "rate(http_requests_total{namespace=\"bhasha\",status=~\"5..\"}[5m]) / rate(http_requests_total{namespace=\"bhasha\"}[5m]) * 100"
         }
       ],
       "fieldConfig": {
@@ -72,7 +72,7 @@
       },
       "targets": [
         {
-          "expr": "count(kube_pod_status_phase{namespace=\"Bhasha\", phase=\"Running\"})"
+          "expr": "count(kube_pod_status_phase{namespace=\"bhasha\", phase=\"Running\"})"
         }
       ]
     },
@@ -87,11 +87,11 @@
       },
       "targets": [
         {
-          "expr": "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{namespace=\"Bhasha\"}[5m]))",
+          "expr": "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{namespace=\"bhasha\"}[5m]))",
           "legendFormat": "p95"
         },
         {
-          "expr": "histogram_quantile(0.50, rate(http_request_duration_seconds_bucket{namespace=\"Bhasha\"}[5m]))",
+          "expr": "histogram_quantile(0.50, rate(http_request_duration_seconds_bucket{namespace=\"bhasha\"}[5m]))",
           "legendFormat": "p50"
         }
       ],
@@ -112,7 +112,7 @@
       },
       "targets": [
         {
-          "expr": "rate(container_cpu_usage_seconds_total{namespace=\"Bhasha\", container!=\"\"}[5m])",
+          "expr": "rate(container_cpu_usage_seconds_total{namespace=\"bhasha\", container!=\"\"}[5m])",
           "legendFormat": "{{pod}}"
         }
       ],
@@ -133,7 +133,7 @@
       },
       "targets": [
         {
-          "expr": "container_memory_working_set_bytes{namespace=\"Bhasha\", container!=\"\"}",
+          "expr": "container_memory_working_set_bytes{namespace=\"bhasha\", container!=\"\"}",
           "legendFormat": "{{pod}}"
         }
       ],
@@ -154,7 +154,7 @@
       },
       "targets": [
         {
-          "expr": "socketio_active_connections{namespace=\"Bhasha\"}"
+          "expr": "socketio_active_connections{namespace=\"bhasha\"}"
         }
       ]
     },
@@ -169,14 +169,14 @@
       },
       "targets": [
         {
-          "expr": "mongodb_connections_active{namespace=\"Bhasha\"}"
+          "expr": "mongodb_connections_active{namespace=\"bhasha\"}"
         }
       ]
     }
   ],
   "schemaVersion": 39,
   "tags": [
-    "Bhasha",
+    "bhasha",
     "nodejs",
     "mern"
   ],
@@ -188,6 +188,6 @@
     "to": "now"
   },
   "timezone": "Asia/Kolkata",
-  "title": "Bhasha Overview",
-  "uid": "Bhasha-overview"
+  "title": "bhasha Overview",
+  "uid": "bhasha-overview"
 }

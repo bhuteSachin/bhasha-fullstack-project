@@ -135,17 +135,17 @@ terraform apply --auto-approve
 
 ### Step 3: Connect your Terminal to the Cluster
 ```bash
-aws eks update-kubeconfig --name Bhasha-cluster-dev --region us-east-1
+aws eks update-kubeconfig --name bhasha-cluster-dev --region us-east-1
 ```
 
 ### Step 4: Add your Passwords (Secrets)
 Never put passwords in code! We inject them directly into Kubernetes.
 ```bash
-kubectl create namespace Bhasha
-kubectl create secret generic Bhasha-secrets \
+kubectl create namespace bhasha
+kubectl create secret generic bhasha-secrets \
   --from-literal=MONGODB_URI="your_mongodb_uri" \
   --from-literal=GEMINI_API_KEY="your_api_key" \
-  --namespace=Bhasha
+  --namespace=bhasha
 ```
 
 ### Step 5: Deploy the App
@@ -155,7 +155,7 @@ kubectl apply -k kubernetes/base
 
 ### Step 6: Get your Live URL
 ```bash
-kubectl get svc Bhasha-client -n Bhasha
+kubectl get svc bhasha-client -n bhasha
 ```
 Find the `EXTERNAL-IP` (it looks like a long AWS link) and paste it into your browser to see the live app!
 

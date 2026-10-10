@@ -1,5 +1,5 @@
 # ==============================
-# Bhasha — Dev Environment
+# bhasha — Dev Environment
 # ==============================
 
 terraform {
@@ -26,7 +26,7 @@ provider "aws" {
 
   default_tags {
     tags = {
-      Project     = "Bhasha"
+      Project     = "bhasha"
       Environment = "dev"
       ManagedBy   = "terraform"
     }
@@ -37,9 +37,9 @@ provider "aws" {
 # Local Variables
 # ==============================
 locals {
-  project_name = "Bhasha"
+  project_name = "bhasha"
   environment  = "dev"
-  cluster_name = "Bhasha-cluster-dev"
+  cluster_name = "bhasha-cluster-dev"
 
   common_tags = {
     Project     = local.project_name

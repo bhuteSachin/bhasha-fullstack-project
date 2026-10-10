@@ -14,7 +14,7 @@ const createTestApp = () => {
 
   // Root route
   app.get('/', (req, res) => {
-    res.status(200).json({ message: 'Bhasha API Server' });
+    res.status(200).json({ message: 'bhasha API Server' });
   });
 
   return app;

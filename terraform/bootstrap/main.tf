@@ -20,8 +20,8 @@ resource "aws_s3_bucket" "terraform_state" {
   bucket = "bhasha-terraform-state"
 
   tags = {
-    Name        = "Bhasha Terraform State"
-    Project     = "Bhasha"
+    Name        = "bhasha Terraform State"
+    Project     = "bhasha"
     Environment = "shared"
     ManagedBy   = "Terraform"
   }

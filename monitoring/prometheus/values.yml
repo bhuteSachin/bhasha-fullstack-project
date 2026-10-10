@@ -16,14 +16,14 @@ prometheus:
             requests:
               storage: 20Gi
 
-    # Scrape Bhasha server metrics
+    # Scrape bhasha server metrics
     additionalScrapeConfigs:
-      - job_name: 'Bhasha-server'
+      - job_name: 'bhasha-server'
         kubernetes_sd_configs:
           - role: pod
             namespaces:
               names:
-                - Bhasha
+                - bhasha
         relabel_configs:
           - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
             action: keep
@@ -40,9 +40,9 @@ prometheus:
 
   # Alert rules
   additionalPrometheusRulesMap:
-    Bhasha-alerts:
+    bhasha-alerts:
       groups:
-        - name: Bhasha.server
+        - name: bhasha.server
           rules:
             # High error rate
             - alert: HighErrorRate
@@ -51,12 +51,12 @@ prometheus:
               labels:
                 severity: critical
               annotations:
-                summary: "High error rate on Bhasha server"
+                summary: "High error rate on bhasha server"
                 description: "Error rate is above 5% for the last 5 minutes"
 
             # Pod restarts
             - alert: PodRestarting
-              expr: increase(kube_pod_container_status_restarts_total{namespace="Bhasha"}[1h]) > 3
+              expr: increase(kube_pod_container_status_restarts_total{namespace="bhasha"}[1h]) > 3
               for: 5m
               labels:
                 severity: warning
@@ -66,7 +66,7 @@ prometheus:
 
             # High CPU usage
             - alert: HighCPUUsage
-              expr: rate(container_cpu_usage_seconds_total{namespace="Bhasha"}[5m]) > 0.8
+              expr: rate(container_cpu_usage_seconds_total{namespace="bhasha"}[5m]) > 0.8
               for: 10m
               labels:
                 severity: warning
@@ -76,7 +76,7 @@ prometheus:
 
             # High memory usage
             - alert: HighMemoryUsage
-              expr: container_memory_working_set_bytes{namespace="Bhasha"} / container_spec_memory_limit_bytes > 0.85
+              expr: container_memory_working_set_bytes{namespace="bhasha"} / container_spec_memory_limit_bytes > 0.85
               for: 5m
               labels:
                 severity: warning
@@ -91,7 +91,7 @@ prometheus:
               labels:
                 severity: warning
               annotations:
-                summary: "High response time on Bhasha server"
+                summary: "High response time on bhasha server"
                 description: "95th percentile response time is above 2 seconds"
 
 # Grafana
@@ -107,14 +107,14 @@ grafana:
     dashboardproviders.yaml:
       apiVersion: 1
       providers:
-        - name: 'Bhasha'
+        - name: 'bhasha'
           orgId: 1
-          folder: 'Bhasha'
+          folder: 'bhasha'
           type: file
           disableDeletion: false
           editable: true
           options:
-            path: /var/lib/grafana/dashboards/Bhasha
+            path: /var/lib/grafana/dashboards/bhasha
 
   sidecar:
     dashboards:
@@ -131,7 +131,7 @@ alertmanager:
   config:
     global:
       smtp_smarthost: 'smtp-relay.brevo.com:2525'
-      smtp_from: 'alerts@Bhasha.com'
+      smtp_from: 'alerts@bhasha.com'
       smtp_auth_username: '9eda5a001@smtp-brevo.com'
       smtp_require_tls: true
 

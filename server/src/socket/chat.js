@@ -170,7 +170,7 @@ export const initializeSocket = (io) => {
             const aiMessageData = {
                 id: Date.now().toString(),
                 room: data.room,
-                author: 'Bhasha',
+                author: 'bhasha',
                 message: aiTranslations.en,
                 translations: aiTranslations,
                 time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),

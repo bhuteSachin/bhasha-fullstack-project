@@ -22,7 +22,7 @@ export const LoadingScreen = ({ onComplete }: { onComplete: () => void }) => {
             setMessage(prev => {
                 if (prev === 'Initializing Neural Network...') return 'Waking up Server...';
                 if (prev === 'Waking up Server...') return 'Loading Language Models...';
-                if (prev === 'Loading Language Models...') return 'Connecting to Bhasha...';
+                if (prev === 'Loading Language Models...') return 'Connecting to bhasha...';
                 return 'Initializing Neural Network...';
             });
         }, 1500);
@@ -56,7 +56,7 @@ export const LoadingScreen = ({ onComplete }: { onComplete: () => void }) => {
 
             {/* Text */}
             <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-glacier-400 mb-2">
-                Bhasha
+                bhasha
             </h2>
             <p className="text-glacier-300/80 font-mono text-sm animate-pulse">
                 {message}

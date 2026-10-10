@@ -117,7 +117,7 @@ export const Pricing = () => {
                 key: keyId,
                 amount: amount,
                 currency: currency,
-                name: 'Bhasha',
+                name: 'bhasha',
                 description: `${selectedPlan === 'monthly' ? 'Monthly' : 'Yearly'} Premium Subscription`,
                 order_id: orderId,
                 handler: async (response: any) => {

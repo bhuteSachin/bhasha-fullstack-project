@@ -1,6 +1,6 @@
 #!/bin/bash
 # ==============================
-# Bhasha — Secret Rotation Script
+# bhasha — Secret Rotation Script
 # ==============================
 # Rotates secrets in AWS Secrets Manager and restarts pods
 # Usage: ./scripts/rotate-secrets.sh <environment>
@@ -9,9 +9,9 @@
 set -euo pipefail
 
 ENVIRONMENT="${1:-dev}"
-PROJECT_NAME="Bhasha"
+PROJECT_NAME="bhasha"
 SECRET_NAME="${PROJECT_NAME}/${ENVIRONMENT}/app-secrets"
-NAMESPACE="Bhasha"
+NAMESPACE="bhasha"
 AWS_REGION="us-east-1"
 
 echo "🔑 Rotating secrets for environment: ${ENVIRONMENT}"
@@ -48,8 +48,8 @@ echo "✅ Secret updated in AWS Secrets Manager"
 
 # Restart deployments to pick up new secrets
 echo "🔄 Restarting deployments..."
-kubectl rollout restart deployment/Bhasha-server -n "${NAMESPACE}"
-kubectl rollout status deployment/Bhasha-server -n "${NAMESPACE}" --timeout=120s
+kubectl rollout restart deployment/bhasha-server -n "${NAMESPACE}"
+kubectl rollout status deployment/bhasha-server -n "${NAMESPACE}" --timeout=120s
 
 echo "✅ Secret rotation complete!"
 echo "⚠️  Note: Active user sessions using old JWT will need to re-authenticate."

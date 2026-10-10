@@ -1,6 +1,6 @@
 #!/bin/bash
 # ==============================
-# Bhasha — End-to-End Health Check
+# bhasha — End-to-End Health Check
 # ==============================
 # Checks all components: server, client, DB connectivity
 # Usage: ./scripts/health-check.sh [server_url] [client_url]
@@ -11,7 +11,7 @@ set -euo pipefail
 SERVER_URL="${1:-http://localhost:5000}"
 CLIENT_URL="${2:-http://localhost:5173}"
 
-echo "🏥 Bhasha Health Check"
+echo "🏥 bhasha Health Check"
 echo "=========================="
 echo ""
 
@@ -49,7 +49,7 @@ echo ""
 # Kubernetes checks (if kubectl available)
 if command -v kubectl &> /dev/null; then
     echo "☸️  Kubernetes"
-    NAMESPACE="Bhasha"
+    NAMESPACE="bhasha"
 
     printf "%-30s" "  Server pods..."
     SERVER_PODS=$(kubectl get pods -n "${NAMESPACE}" -l component=server --field-selector status.phase=Running --no-headers 2>/dev/null | wc -l)

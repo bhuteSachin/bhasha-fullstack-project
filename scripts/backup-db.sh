@@ -1,6 +1,6 @@
 #!/bin/bash
 # ==============================
-# Bhasha — MongoDB Atlas Backup Verification
+# bhasha — MongoDB Atlas Backup Verification
 # ==============================
 # Verifies that MongoDB Atlas automated backups are running
 # Usage: ./scripts/backup-db.sh

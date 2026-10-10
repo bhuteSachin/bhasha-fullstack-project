@@ -1,5 +1,5 @@
 # ==============================
-# Bhasha — Development Docker Compose
+# bhasha — Development Docker Compose
 # ==============================
 # Usage: docker compose up -d
 # ==============================
@@ -45,6 +45,7 @@ services:
       - "5173:5173"
     environment:
       - NODE_ENV=development
+      - VITE_PROXY_TARGET=http://server:5000
     volumes:
       - ./client:/app
       - /app/node_modules

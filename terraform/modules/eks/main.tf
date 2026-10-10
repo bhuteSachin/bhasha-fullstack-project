@@ -1,5 +1,5 @@
 # ==============================
-# Bhasha — EKS Module
+# bhasha — EKS Module
 # ==============================
 
 terraform {

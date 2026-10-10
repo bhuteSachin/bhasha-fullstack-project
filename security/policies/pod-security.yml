@@ -1,12 +1,12 @@
 # ==============================
-# Pod Security Standards — Bhasha
+# Pod Security Standards — bhasha
 # ==============================
 # Enforces restricted security context for all pods
 
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: Bhasha
+  name: bhasha
   labels:
     pod-security.kubernetes.io/enforce: restricted
     pod-security.kubernetes.io/audit: restricted

@@ -1,5 +1,5 @@
 # ==============================
-# Bhasha — Deploy Monitoring Stack
+# bhasha — Deploy Monitoring Stack
 # ==============================
 # Usage: ansible-playbook playbooks/deploy-monitoring.yml -i inventory/dev.yml
 # ==============================
@@ -57,7 +57,7 @@
     # ==============================
     - name: Create Grafana dashboards ConfigMap
       command: >
-        kubectl create configmap Bhasha-dashboards
+        kubectl create configmap bhasha-dashboards
         --from-file={{ playbook_dir }}/../monitoring/grafana/dashboards/
         --namespace {{ monitoring_namespace }}
         --dry-run=client -o yaml | kubectl apply -f -
