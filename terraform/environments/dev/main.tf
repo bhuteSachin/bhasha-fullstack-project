@@ -98,7 +98,7 @@ module "security" {
   project_name = local.project_name
   environment  = local.environment
 
-  github_repo = "bhuteSachin/bhasha-fullstack-project"
+  github_repo = "bhuteSachin@185914091/bhasha-fullstack-project@1408319900"
 
   eks_oidc_provider_arn = module.eks.oidc_provider_arn
   eks_oidc_provider_url = module.eks.oidc_provider_url
