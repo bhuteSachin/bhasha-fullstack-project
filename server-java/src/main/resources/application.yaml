@@ -1,0 +1,19 @@
+server: 
+  port: 8085
+
+spring:
+  application:
+    name: server-java
+
+  data: 
+    mongodb:
+      uri: ${MONGODB_URI}
+      
+# Gemini configuration
+gemini: 
+  model: "gemini-3.8-flash"
+  api-key: ${GEMINI_API_KEY}
+
+security:
+  jwt:
+    secret: ${JWT_SECRET}
