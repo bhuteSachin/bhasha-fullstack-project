@@ -1,40 +1,25 @@
 # ==============================
 # bhasha — Development Docker Compose
 # ==============================
-# Usage: docker compose up -d
+# Usage: docker compose up -d --build
 # ==============================
 
 services:
-  # ==============================
-  # Backend Server (Node.js)
-  # ==============================
-  server:
+  # Java Spring Boot backend
+  java-backend:
     build:
-      context: ./server
-      dockerfile: Dockerfile.dev
-    container_name: bhasha-server
+      context: ./server-java
+      dockerfile: Dockerfile
+    container_name: bhasha-java-backend
     restart: unless-stopped
     ports:
-      - "5000:5000"
+      - "8085:8085"
     env_file:
-      - .env
-    environment:
-      - NODE_ENV=development
-    volumes:
-      - ./server:/app
-      - /app/node_modules
+      - ./server-java/.env
     networks:
       - bhasha-network
-    healthcheck:
-      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:5000/health" ]
-      interval: 30s
-      timeout: 3s
-      retries: 3
-      start_period: 10s
 
-  # ==============================
-  # Frontend Client (React/Vite)
-  # ==============================
+  # React/Vite frontend
   client:
     build:
       context: ./client
@@ -45,19 +30,16 @@ services:
       - "5173:5173"
     environment:
       - NODE_ENV=development
-      - VITE_PROXY_TARGET=http://server:5000
+      - VITE_PROXY_TARGET=http://java-backend:8085
+      - VITE_JAVA_API_URL=http://localhost:8085
     volumes:
       - ./client:/app
       - /app/node_modules
     depends_on:
-      server:
-        condition: service_healthy
+      - java-backend
     networks:
       - bhasha-network
 
-# ==============================
-# Networks
-# ==============================
 networks:
   bhasha-network:
     driver: bridge
